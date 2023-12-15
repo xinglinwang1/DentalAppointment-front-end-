@@ -1,0 +1,266 @@
+<template>
+  <div id="map-container"></div>
+  <div id="info-container"></div>
+  <!-- <div id="myPageTop">
+    <table>
+        <tr>
+            <td>
+                <label>请输入关键字：</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="tipinput"/>
+            </td>
+        </tr>
+    </table>
+</div> -->
+</template>
+
+
+<script>
+import { defineComponent } from 'vue'
+import AMapLoader from "@amap/amap-jsapi-loader";
+import AMap from "@amap/amap-jsapi-loader";
+// 设置安全密钥
+window._AMapSecurityConfig = {
+    securityJsCode: 'bc3517c76077639446ad6001b4015cd6',
+}
+window.navigator.geolocation.getCurrentPosition(function (position) {
+    console.log(position.coords.latitude)
+    console.log(position.coords.longitude)
+})
+
+export default defineComponent({
+  name: 'HospitalMap',
+  data() {
+    return {
+      latitude: 0.0,
+      longitude: 0.0,
+      map : null,
+      auto : null,
+      placeSearch : null, 
+      marker: null,
+      polylinePath: null,
+      canvas: null,
+      context: null,
+      radious: 0,
+      CanvasLayer: null,
+    }
+  },
+  methods: {
+    // 获取用户当前所在的经纬度坐标
+    getPosition () {
+      return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            let latitude = position.coords.latitude
+            let longitude = position.coords.longitude
+            let data = {
+              latitude: latitude,
+              longitude: longitude
+            }
+            resolve(data)
+          }, function () {
+            reject(arguments)
+          })
+        } else {
+          reject('你的浏览器不支持当前地理位置信息获取')
+        }
+      })
+    },
+    
+
+    initMap() {
+      AMapLoader.load({
+        "key": "89897adfafea7685bf5cbf5955177107", 
+        "version": "2.0",   // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
+        "plugins": ['AMap.PlaceSearch','AMap.AutoComplete'],   // 需要使用的的插件列表
+      }).then((AMap)=>{
+        // 初始化地图
+          // this.map = new AMap.Map('map-container',{
+          //   viewMode : "2D",  //  是否为3D地图模式
+          //   zoom : 13,   // 初始化地图级别
+          //   center : [111.121212, 30.333333], //中心点坐标
+          //   resizeEnable: true,
+          // });
+          // console.log('初始化地图完毕')
+
+          // ///////////////////////////////////////////////////////////////////////
+          // //下面直接添加覆盖物，插件，属性等
+
+          // //设置地图中心点
+          // this.map.setCenter([this.longitude, this.latitude]);
+          
+          //设置地名搜索框
+          //this.searchLocation()
+          // AMap.plugin(['AMap.PlaceSearch','AMap.AutoComplete'], function(){
+          //     this.auto = new AMap.AutoComplete({
+          //       input: "tipinput"
+          //     });
+          //   this.placeSearch = new AMap.PlaceSearch({
+          //         map: this.map
+          //     });  //构造地点查询类
+          //     this.auto.on("select", this.selectSite);//注册监听，当选中某条记录时会触发
+              
+          // });
+
+
+        // 获取当前经纬度坐标
+        this.getPosition().then(result => {
+          // 返回结果示例：
+          // {latitude: 30.318030999999998, longitude: 120.05561639999999}
+          // 取小数点后6位
+          this.longitude = String(result.longitude).match(/\d+\.\d{0,6}/)[0],
+          this.latitude = String(result.latitude).match(/\d+\.\d{0,6}/)[0],
+          console.log('111')
+
+          // 初始化地图
+          this.map = new AMap.Map('map-container',{
+            viewMode : "2D",  //  是否为3D地图模式
+            zoom : 13,   // 初始化地图级别
+            center : [this.longitude, this.latitude], //中心点坐标
+            resizeEnable: true,
+          });
+          console.log('初始化地图完毕')
+
+          //下面添加覆盖物，插件，属性等
+          
+          // 使用点覆盖物表示医院位置
+          // 创建点覆盖物
+          this.marker = new AMap.Marker({
+              position: new AMap.LngLat(121.21, 31.28),
+              icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
+              offset: new AMap.Pixel(-13, -30),
+              //title: 'tip',
+          });
+          // 点覆盖物的鼠标移入移出事件
+          this.marker.on('mouseover', this.overMarker);
+          this.marker.on('mouseout', this.outMarker);
+          // 添加点覆盖物
+          this.map.add(this.marker);
+          
+          // 使用canvas图层表示医院预约拥挤程度
+          // 添加地图控件
+          // AMap.plugin(["AMap.ControlBar"], function () {
+          //   var bar = new AMap.ControlBar();
+          //   this.map.addControl(bar);
+          // });
+          // 为点覆盖物添加canvas图层
+          this.canvas = document.createElement('canvas');
+          this.canvas.width = this.canvas.height = 200;
+
+          this.context = this.canvas.getContext('2d')
+          this.context.fillStyle = 'rgb(0,100,255)';
+          this.context.strokeStyle = 'white';
+          this.context.globalAlpha = 1;
+          this.context.lineWidth = 2;
+          
+          this.createCanvasLayer();
+          this.map.addLayer(this.CanvasLayer);
+          this.draw();
+        }).catch(err => {
+          console.log(err)
+        })
+      }).catch(e => {
+        console.log(e);
+      });
+    },
+    
+    overMarker() {
+      var text = '鼠标移入覆盖物！'
+      document.querySelector("#info-container").innerText = text;
+    },
+
+    outMarker() {
+      var text = '鼠标移出覆盖物！'
+      document.querySelector("#info-container").innerText = text;
+    },
+
+    draw() {
+      this.context.clearRect(0, 0, 200, 200)
+      this.context.globalAlpha = (this.context.globalAlpha - 0.01 + 1) % 1;
+      this.radious = (this.radious + 1) % 100;
+
+      this.context.beginPath();
+      this.context.arc(100, 100, this.radious, 0, 2 * Math.PI);
+      this.context.fill();
+      this.context.stroke();
+
+      // 刷新渲染图层
+      this.CanvasLayer.reFresh();
+
+      AMap.Util.requestAnimFrame(this.draw());
+    },
+
+    createCanvasLayer() {
+      this.CanvasLayer = new AMap.CanvasLayer({
+        canvas: this.canvas,
+        bounds: new AMap.Bounds(
+            // [116.328911, 39.937229],
+            // [116.342659, 39.946275]
+            [121.200000, 31.250000],
+            [121.300000, 31.350000]
+        ),
+        zooms: [3, 18],
+      });
+    }
+
+    // searchLocation() {
+    //   //AMap.plugin(['AMap.PlaceSearch','AMap.AutoComplete'], function(){
+    //     this.auto = new AMap.AutoComplete({
+    //       input: "tipinput"
+    //     });
+    //     this.placeSearch = new AMap.PlaceSearch({
+    //         map: this.map
+    //     });  //构造地点查询类
+    //     console.log('构造地点查询类完毕')
+    //     this.auto.on("select", this.selectSite);//注册监听，当选中某条记录时会触发
+    //   //});
+    // },
+
+    // selectSite(e) {
+    //   if (e.poi.location) {
+    //     console.log("经纬度", e);
+    //     //this.lnglat = [e.poi.location.lng, e.poi.location.lat];
+    //     this.placeSearch.setCity(e.poi.adcode);
+    //     this.placeSearch.search(e.poi.name); //关键字查询
+    //   }
+    // }
+  },
+  mounted() {
+    //DOM初始化完成进行地图初始化
+    this.initMap()
+  }
+})
+</script>
+
+<style scoped>
+#map-container {
+  width: 24%;
+  height: 350px;
+  margin-top: 20px;
+  margin-left: 1%;
+  border: 1px solid #ccc;
+  float: left;
+  font-family: "微软雅黑";
+}
+
+/* 隐藏高德logo  */
+.amap-logo {
+  display: none !important;
+}
+/* 隐藏高德版权  */
+.amap-copyright {
+  display: none !important;
+}
+
+#info-container {
+  width: 24%;
+  height: 200px;
+  margin-top: 20px;
+  margin-left: 1%;
+  border: 1px solid #ccc;
+  float: left;
+}
+</style>
