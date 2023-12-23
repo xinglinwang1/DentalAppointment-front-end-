@@ -1,3 +1,8 @@
+<!-- 
+    页面：首页
+    角色：患者、医生、管理员
+    功能：本系统的首页，展示地图等信息，包含登录入口
+-->
 <template>
   <div class="home">
     <NavigationBar/>
