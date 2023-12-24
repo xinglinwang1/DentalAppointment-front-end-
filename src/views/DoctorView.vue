@@ -1,3 +1,8 @@
+<!-- 
+    页面：患者预约医生页面
+    角色：患者
+    功能：患者在本页面查看医生的可预约时间段，并进行预约操作
+-->
 <script lang="ts">
 import { defineComponent } from 'vue';
 import NavigationBar from '../components/HomeView/NavigationBar.vue'

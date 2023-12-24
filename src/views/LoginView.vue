@@ -1,3 +1,8 @@
+<!-- 
+    页面：登录页
+    角色：患者、医生、管理员
+    功能：登录注册
+-->
 <template>
   <div>
     <LoginBackground/>

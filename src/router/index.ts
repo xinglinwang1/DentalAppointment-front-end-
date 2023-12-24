@@ -5,6 +5,8 @@ import LoginView from '../views/LoginView.vue'
 import HospitalView from "../views/HospitalView.vue";
 import DoctorView from "../views/DoctorView.vue";
 import UserHomeView from "@/views/UserHomeView.vue";
+import SchedulingView from '../views/SchedulingView.vue'
+import AdminHomeView from '../views/AdminHomeView.vue'
 
 // const routes: Array<RouteRecordRaw> = [
 //   {
@@ -42,6 +44,16 @@ const router = createRouter({
       name: 'UserHomeView',
       component: UserHomeView,
     },
+    {
+      path: '/scheduling/:doctorname',
+      name: 'SchedulingView',
+      component: SchedulingView,
+    },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: AdminHomeView,
+    }
   ]
 })
 

@@ -1,3 +1,8 @@
+<!-- 
+    页面：医院页面
+    角色：患者
+    功能：展示医院信息、医院可预约的医生（点击可跳转到患者预约医生页面）
+-->
 <script lang="ts">
 import { defineComponent } from 'vue';
 import NavigationBar from '../components/HomeView/NavigationBar.vue'
