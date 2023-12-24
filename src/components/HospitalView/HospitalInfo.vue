@@ -1,11 +1,24 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 export default defineComponent({
-  name: 'HospitalIntro',
+  name: 'HospitalInfo',
+  props: {
+    hospitalId: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
-      hospitalName: "医院名医院名医院名",
-      hospitalIntro: "简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介"
+      hospitalInfo: {
+        hospitalId: "hospital123",
+        name: "医院名医院名医院名",
+        introduction: "简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介",
+        location: "City, Country",
+        contact: "123-456-7890",
+        departments: ["Dentistry", "Orthopedics", "Cardiology"],
+      },
+
     }
   }
 })
@@ -13,8 +26,8 @@ export default defineComponent({
 
 <template>
   <div class="hospitalIntro-container">
-    <h1 class="hospital-name">{{ hospitalName }}</h1>
-    <div class="hospital-intro">{{ hospitalIntro }}</div>
+    <h1 class="hospital-name">{{ hospitalInfo.name }}</h1>
+    <div class="hospital-intro">{{ hospitalInfo.introduction }}</div>
   </div>
 </template>
 

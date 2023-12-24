@@ -24,8 +24,8 @@ export default defineComponent({
 <template>
   <NavigationBar/>
 
-  <HospitalInfo/>
-  <DoctorList/>
+  <HospitalInfo :hospitalId="hospitalId"/>
+  <DoctorList :hospitalId="hospitalId"/>
   <PageFooting/>
 
 </template>

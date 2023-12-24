@@ -11,7 +11,14 @@ export default defineComponent({
   },
   data() {
     return {
-
+      doctorInfo: {
+        username: "医生用户名2",
+        name: "医生2",
+        hospital: "医院名",
+        department: "部门",
+        intro: "医生简介医生简介医生简介医生简介医生简介医生简介",
+        photo: "https://n2.hdfimg.com/g11/M05/DD/97/1IYBAGQULcCAAcO1AAOOM6pN7AA089_200_200_1.jpg?7184"
+      },
     }
   }
 })
@@ -25,13 +32,13 @@ export default defineComponent({
       </div>
       <div class="info">
         <p class="name">
-          {{ doctorname }}
+          {{ doctorInfo.name }}
         </p>
         <p class="hos-faculty">
-          北京协和医院&nbsp; 康复医学科
+          {{ doctorInfo.hospital }}&nbsp; {{ doctorInfo.department }}
         </p>
         <p class="goodat">
-          擅长：特发性脊柱侧凸的保守治疗
+          {{ doctorInfo.intro }}
         </p>
       </div>
 

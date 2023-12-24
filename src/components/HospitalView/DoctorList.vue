@@ -4,6 +4,12 @@ import DoctorView from "@/views/DoctorView.vue";
 
 export default defineComponent({
   name: 'DoctorList',
+  props: {
+    hospitalId: {
+      type: String,
+      required: true,
+    },
+  },
   computed: {
     DoctorView() {
       return DoctorView
@@ -12,9 +18,30 @@ export default defineComponent({
   data() {
     return {
       doctorList: [
-        {name: "医生1"},
-        {name: "医生2"},
-        {name: "医生3"},
+        {
+          username: "医生用户名1",
+          name: "医生1",
+          hospital: "医院名",
+          department: "部门",
+          intro: "医生简介医生简介医生简介医生简介医生简介医生简介",
+          photo: "https://n2.hdfimg.com/g11/M05/DD/97/1IYBAGQULcCAAcO1AAOOM6pN7AA089_200_200_1.jpg?7184"
+        },
+        {
+          username: "医生用户名2",
+          name: "医生2",
+          hospital: "医院名",
+          department: "部门",
+          intro: "医生简介医生简介医生简介医生简介医生简介医生简介",
+          photo: "https://n2.hdfimg.com/g11/M05/DD/97/1IYBAGQULcCAAcO1AAOOM6pN7AA089_200_200_1.jpg?7184"
+        },
+        {
+          username: "医生用户名3",
+          name: "医生3",
+          hospital: "医院名",
+          department: "部门",
+          intro: "医生简介医生简介医生简介医生简介医生简介医生简介",
+          photo: "https://n2.hdfimg.com/g11/M05/DD/97/1IYBAGQULcCAAcO1AAOOM6pN7AA089_200_200_1.jpg?7184"
+        },
       ]
     }
   }
@@ -27,20 +54,20 @@ export default defineComponent({
     <div class="doc-container">
       <ul class="doc-list">
         <li v-for="doctor in doctorList" :key="doctor.name" class="item">
-          <router-link :to="{ name: 'DoctorView', params: { doctorname: doctor.name }}">
+          <router-link :to="{ name: 'DoctorView', params: { doctorname: doctor.username }}">
             <a class="doctor-card">
               <div class="img-wrap">
-                <img src="https://n2.hdfimg.com/g11/M05/DD/97/1IYBAGQULcCAAcO1AAOOM6pN7AA089_200_200_1.jpg?7184" alt="photo" class="avatar">
+                <img :src="doctor.photo" alt="photo" class="avatar">
               </div>
               <div class="info">
                 <p class="name">
-                  {{doctor.name}}
+                  {{ doctor.name }}
                 </p>
                 <p class="hos-faculty">
-                  北京协和医院&nbsp; 康复医学科
+                  {{ doctor.hospital }}&nbsp; {{ doctor.department }}
                 </p>
                 <p class="goodat">
-                  擅长：特发性脊柱侧凸的保守治疗
+                  {{ doctor.intro }}
                 </p>
               </div>
 
