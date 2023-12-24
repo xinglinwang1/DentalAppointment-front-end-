@@ -38,7 +38,7 @@ export default defineComponent({
 <style scoped>
 .wrap-container{
   width: 1200px;
-  //box-sizing: border-box;
+  /* box-sizing: border-box; */
   margin: 16px auto;
 }
 </style>
