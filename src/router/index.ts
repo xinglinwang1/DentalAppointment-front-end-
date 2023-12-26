@@ -83,34 +83,34 @@ export default router
 
 // 调试时请注释掉以下代码
 
-// router.beforeEach((to, from, next) => {
-//   // 检查是否需要登录权限
-//   if (to.meta.requiresAuth) {
-//     // 这里可以根据你的实际情况判断用户是否登录
-//     const role = store.state.role
-//
-//     if (role === "unAuthenticated") {
-//       // 未登录，跳转到登录页
-//       next('/loginview');
-//     } else {
-//       // 已登录，检查是否有其他权限要求
-//       const requiredRoles = to.meta.requiredRoles;
-//
-//       if (requiredRoles && requiredRoles.length > 0) {
-//         if (!requiredRoles.includes(role)) {
-//           // 用户角色不满足要求，跳转到首页或其他页面
-//           next('/error');
-//         } else {
-//           // 用户角色满足要求，继续正常跳转
-//           next();
-//         }
-//       } else {
-//         // 不需要其他权限，继续正常跳转
-//         next();
-//       }
-//     }
-//   } else {
-//     // 不需要登录权限，直接继续跳转
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  // 检查是否需要登录权限
+  if (to.meta.requiresAuth) {
+    // 这里可以根据你的实际情况判断用户是否登录
+    const role = store.state.role
+
+    if (role === "unAuthenticated") {
+      // 未登录，跳转到登录页
+      next('/loginview');
+    } else {
+      // 已登录，检查是否有其他权限要求
+      const requiredRoles = to.meta.requiredRoles;
+
+      if (requiredRoles && requiredRoles.length > 0) {
+        if (!requiredRoles.includes(role)) {
+          // 用户角色不满足要求，跳转到首页或其他页面
+          next('/error');
+        } else {
+          // 用户角色满足要求，继续正常跳转
+          next();
+        }
+      } else {
+        // 不需要其他权限，继续正常跳转
+        next();
+      }
+    }
+  } else {
+    // 不需要登录权限，直接继续跳转
+    next();
+  }
+});
