@@ -42,6 +42,7 @@
           </el-form-item>
        
         </el-form>
+        <el-link type="primary" @click="this.$router.push({ name: 'RegisterView' })">没有账号？注册一个</el-link>
       </div>
     </div>
   </div>

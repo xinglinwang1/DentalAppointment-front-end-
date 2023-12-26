@@ -9,6 +9,7 @@ import SchedulingView from '../views/SchedulingView.vue'
 import AdminHomeView from '../views/AdminHomeView.vue'
 import DoctorHomeView from "@/views/DoctorHomeView.vue";
 import ErrorView from "@/views/ErrorView.vue";
+import RegisterView from "@/views/RegisterView.vue";
 
 
 const router = createRouter({
@@ -30,6 +31,12 @@ const router = createRouter({
       path: '/loginview',
       name: 'LoginView',
       component: LoginView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/registerview',
+      name: 'RegisterView',
+      component: RegisterView,
       meta: { requiresAuth: false }
     },
     {
