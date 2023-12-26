@@ -1,12 +1,14 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import axios from "axios";
+import store from "@/store";
 
 export default defineComponent({
   name: "DoctorInfoPanel",
   data() {
     return {
       dialogVisible: false,
+      doctor_username: store.state.username,
       doctor_info: {
         id: 999,
         username: "用户名",
@@ -25,7 +27,7 @@ export default defineComponent({
   methods: {
     async getDoctorData() {
       try {
-        const response = await axios.get('http://localhost:8101/api/doctor/医生1');
+        const response = await axios.get('http://localhost:8101/api/doctor/' + this.doctor_username);
         this.doctor_info = response.data.data;
       } catch (error) {
         console.error('Error fetching doctor data:', error);

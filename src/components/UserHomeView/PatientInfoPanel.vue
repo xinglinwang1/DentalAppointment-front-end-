@@ -2,12 +2,14 @@
 import {defineComponent} from 'vue'
 import {Clock, Iphone, Message, Tickets, User} from "@element-plus/icons-vue";
 import axios from "axios";
+import store from "@/store";
 
 export default defineComponent({
   name: "PatientInfoPanel",
   components: {Clock, Message, Tickets, Iphone, User},
   data() {
     return {
+      patient_username: store.state.username,
       dialogVisible: false,
       patient_info: {
         id: 999,
@@ -28,7 +30,7 @@ export default defineComponent({
   methods: {
     async getPatientData() {
       try {
-        const response = await axios.get('http://localhost:8101/api/patient/我是张三');
+        const response = await axios.get('http://localhost:8101/api/patient/' + this.patient_username);
         this.patient_info = response.data.data;
       } catch (error) {
         console.error('Error fetching patient data:', error);

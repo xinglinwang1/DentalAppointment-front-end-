@@ -1,6 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import axios from "axios";
+import store from "@/store";
 
 export default defineComponent({
   name: "MyAppointmentPanel",
@@ -16,7 +17,7 @@ export default defineComponent({
     },
     async getAppointments() {
       try {
-        const response = await axios.get('http://localhost:8201/api/appointment/get/patient456');
+        const response = await axios.get('http://localhost:8201/api/appointment/get/' + store.state.username);
         this.appointments = response.data.data;
       } catch (error) {
         console.error('Error fetching appointment data:', error);
@@ -25,7 +26,7 @@ export default defineComponent({
     async Cancel(row: any) {
       console.log('Edit row:', row.id, 'Operation:', "cancel");
       try {
-        const response = await axios.put('http://localhost:8201/api/appointment//cancel/patient/' + row.id);
+        const response = await axios.put('http://localhost:8201/api/appointment/cancel/patient/' + row.id);
         this.appointments = response.data.data;
       } catch (error) {
         console.error('Error fetching appointment data:', error);

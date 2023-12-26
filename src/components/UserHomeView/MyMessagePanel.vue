@@ -1,6 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import axios from "axios";
+import store from "@/store";
 
 export default defineComponent({
   name: "MyMessagePanel",
@@ -20,7 +21,7 @@ export default defineComponent({
           method: 'post',
           url: 'http://localhost:8302/api/message/get_usermessage',
           data: {
-            username: 'patient456',
+            username: store.state.username,
           },
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'

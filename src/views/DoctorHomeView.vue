@@ -38,6 +38,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import DoctorInfoPanel from "@/components/DoctorHomeView/DoctorInfoPanel.vue";
+import store from "@/store";
 // import NavigationBar from '../components/HomeView/NavigationBar.vue'
 // import PageFooting from '../components/HomeView/PageFooting.vue'
 
@@ -49,7 +50,7 @@ export default defineComponent({
     methods :{
       handleSelect(key: string){
         if(key === "schedule") {
-          this.$router.push("/scheduling/1")
+          this.$router.push("/scheduling/" + store.state.username)
         }
         else {
           this.activeTab = key
