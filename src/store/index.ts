@@ -1,6 +1,17 @@
 import { createStore } from 'vuex'
 
 export default createStore({
+
+  // --------------------------------
+  // 调试使用
+  // state: {
+  //   role: "patient",
+  //   username: "2",
+  //   token: "",
+  // },
+  // --------------------------------
+
+
   state: {
     role: "unAuthenticated",
     username: "",

@@ -40,11 +40,11 @@ export default defineComponent({
       pageSize: 10,
       messages: [
         {
-          id: "0",
-          time: "1",
-          sender: "2",
-          receiver: "3",
-          context: "4"
+          id: "",
+          time: "",
+          sender: "",
+          receiver: "",
+          context: ""
         }
       ]
     }
