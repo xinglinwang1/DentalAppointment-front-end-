@@ -30,7 +30,7 @@ export default defineComponent({
   <NavigationBar/>
 
   <HospitalInfo/>
-  <DoctorList/>
+  <DoctorList :hospitalId="hospitalId"/>
   <PageFooting/>
 
 </template>

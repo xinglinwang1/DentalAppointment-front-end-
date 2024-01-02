@@ -18,6 +18,12 @@ export default defineComponent({
     PageFooting,
     DoctorInfo,
   },
+  props: {
+    hospitalId: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       doctorname: this.$route.params.doctorname,
@@ -29,7 +35,7 @@ export default defineComponent({
 <template>
   <NavigationBar/>
   <DoctorInfo :doctorname="doctorname"/>
-  <DoctorTime/>
+  <DoctorTime :doctorname="doctorname" :hospitalId="hospitalId"/>
   <PageFooting/>
 </template>
 

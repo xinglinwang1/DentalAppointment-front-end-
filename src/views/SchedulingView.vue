@@ -7,7 +7,7 @@
   <div>
     <NavigationBar/>
     <DoctorInfo :doctorname="doctorname"/>
-    <ReserveInfoList/>
+    <ReserveInfoList :doctorname="doctorname"/>
     <PageFooting/>
   </div>
 </template>
