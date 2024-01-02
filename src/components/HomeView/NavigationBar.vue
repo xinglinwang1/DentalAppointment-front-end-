@@ -1,7 +1,7 @@
 <template>
   <div class="navigation-bar-container">
     <div class="logo">
-      <img src="../../assets/images/logo.png" alt="no image">
+      <img src="../../assets/images/logo.png" alt="no image" @click="this.$router.push({ name: 'HomeView' })">
     </div>
     <div class="navigate-menu">
       <el-menu
@@ -28,7 +28,7 @@
     </div>
     <button class="search-button" @click="search()">搜索</button>
     <button class="login-button" @click="goToLogin()">登录 / 注册</button>
-    <img class="customer-service" src="../../assets/images/customer_service.png" alt="no image">
+    <img class="customer-service" src="../../assets/images/customer_service.png" alt="no image" @click="this.$router.push({ name: 'UserHomeView' })">
     <div class="clearfix"> </div>
   </div>
 </template>

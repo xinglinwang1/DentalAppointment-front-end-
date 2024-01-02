@@ -29,7 +29,7 @@ export default defineComponent({
 <template>
   <NavigationBar/>
 
-  <HospitalInfo/>
+  <HospitalInfo :hospitalId="hospitalId"/>
   <DoctorList :hospitalId="hospitalId"/>
   <PageFooting/>
 

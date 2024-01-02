@@ -1,5 +1,5 @@
 <template>
-  <div class="doctor-entrance-container">
+  <div class="doctor-entrance-container" @click="this.$router.push({ name: 'DoctorHomeView' })">
     <img class="doctor-image" src="../../assets/images/doctor.png" alt="no image">
     <span class="doctor-entrance-font">医生入口</span>
   </div>

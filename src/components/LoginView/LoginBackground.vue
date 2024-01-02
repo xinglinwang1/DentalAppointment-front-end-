@@ -16,17 +16,21 @@
 
       <div class="loginContainer">
         <h3 class="loginTitle">系统登录</h3>
+        <el-radio-group v-model="role">
+          <el-radio label="patient">普通用户</el-radio>
+          <el-radio label="doctor">医生</el-radio>
+          <el-radio label="admin">管理员</el-radio>
+        </el-radio-group>
         <el-form
           ref="ruleFormRef"
           :model="ruleForm"
           :rules="rules"
           label-width="80px"
           class="demo-ruleForm"
-          :size="formSize"
           status-icon
         >
           <el-form-item label="用户名：" prop="user_id">
-            <el-input v-model="ruleForm.user_id" />
+            <el-input v-model="ruleForm.username" />
           </el-form-item>
   
           <el-form-item label="密码：" prop="password">
@@ -38,37 +42,35 @@
           </el-form-item>
        
         </el-form>
+        <el-link type="primary" @click="this.$router.push({ name: 'RegisterView' })">没有账号？注册一个</el-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import Mock from 'mockjs'
-// import Cookie from 'js-cookie'
 import { defineComponent } from 'vue'
+import axios from "axios";
+import store from "@/store";
 
 export default defineComponent({
   name: 'LoginBackground',
   components: {},
   data() {
     return {
-      loginConfirm: [
-        {
-          user_id: 'admin',
-          password: '123456',
-        },
-        {
-          user_id: 'abcdefg',
-          password: '123456',
+      role: "patient",
+      receiveData:{
+        message: "",
+        data: {
+          access_token: ""
         }
-      ],
+      },
       ruleForm: {
-        user_id: '',
+        username: '',
         password: '',
       },
       rules: {
-        user_id: [
+        username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 1, max: 10, message: '用户名长度必须在1~10个字符之间', trigger: 'blur' },
         ],
@@ -80,28 +82,40 @@ export default defineComponent({
     }
   },
   methods: {
-    submit() {
-      // 验证用户输入的user_id和password是否匹配loginConfirm中的数据
-      const isValidUser = this.loginConfirm.some(item => 
-        item.user_id === this.ruleForm.user_id && item.password === this.ruleForm.password
-      );
-    
-      // 如果匹配成功
-      if (isValidUser) {
-        // // token信息
-        // const token = Mock.Random.guid();
-        // // 将token信息存入Cookie，用于不同页面之间的通信
-        // Cookie.set('token', token);
-        // 跳转至首页
-        this.$router.push({ name: 'HomeView' });
-      } 
-      else {
-        // 如果匹配不成功，弹出一个提示框告知用户
+    async submit() {
+      try {
+        const response = await axios({
+          method: 'post',
+          url: 'http://localhost:8101/api/' + this.role + '/login',
+          data: {
+            username: this.ruleForm.username,
+            password: this.ruleForm.password
+          },
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        })
+        this.receiveData = response.data;
+        if(this.receiveData.message === "操作成功"){
+          store.state.token = this.receiveData.data.access_token
+          store.commit('setRole', this.role)
+          store.commit('setUsername', this.ruleForm.username)
+          store.commit('setToken', this.receiveData.data.access_token)
+          console.log(store.state.role)
+          console.log(store.state.username)
+          console.log(store.state.token)
+          // 跳转至首页
+          this.$router.push({ name: 'HomeView' });
+        }
+
+      } catch (error) {
         this.$message({
           message: '用户名或密码错误',
           type: 'error'
         });
+        console.error('Error login', error);
       }
+
     }
   },
 })

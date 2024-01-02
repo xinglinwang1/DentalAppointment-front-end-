@@ -30,6 +30,7 @@ import ReservationBar from '../components/HomeView/ReservationBar.vue'
 import HospitalMap from '../components/HomeView/HospitalsMap.vue'
 
 import PageFooting from '../components/HomeView/PageFooting.vue'
+import store from "@/store";
 
 export default defineComponent({
   name: 'HomeView',
@@ -45,5 +46,10 @@ export default defineComponent({
 
     PageFooting,
   },
+  mounted() {
+    console.log(store.state.role)
+    console.log(store.state.username)
+    console.log(store.state.token)
+  }
 });
 </script>
