@@ -30,6 +30,7 @@ export default {
     window._AMapSecurityConfig = {
       securityJsCode: 'bc3517c76077639446ad6001b4015cd6' // 申请key对应的秘钥 -> 注意了，如果不搭配密钥使用，搜索将没有结果
     }
+  
     // 初始化地图
     this.initAMap()
     // 加载页面时获取所有医院的信息列表
@@ -92,15 +93,15 @@ export default {
           // 添加点覆盖物，表示医院的位置
           this.marker1 = new AMap.Marker({
             icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
-            position: [this.latitudes[0], this.longitudes[0]]
+            position: [121.232528,31.300411]
           });
           this.marker2 = new AMap.Marker({
             icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
-            position: [this.latitudes[1], this.longitudes[1]]
+            position: [121.224375,31.263955]
           });
           this.marker3 = new AMap.Marker({
             icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
-            position: [this.latitudes[2], this.longitudes[2]]
+            position: [121.195965,31.286769]
           });
           map.add(this.marker1)
           map.add(this.marker2)
