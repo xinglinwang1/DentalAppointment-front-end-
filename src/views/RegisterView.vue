@@ -2,6 +2,7 @@
 /* eslint-disable */
 import {defineComponent} from 'vue'
 import axios from "axios";
+import store from "@/store";
 
 export default defineComponent({
   name: "RegisterView",
@@ -87,9 +88,32 @@ export default defineComponent({
           console.error('Error changing patient data:', error);
         }
 
+        // 注册成功，自动登陆
+        try {
+          const response = await axios({
+            method: 'post',
+            url: 'http://121.43.108.102:8101/api/' + this.role + '/login',
+            data: {
+              username: this.formData.patientInfo.username,
+              password: this.formData.patientInfo.password,
+            },
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          })
+          this.receiveData = response.data;
+          if(this.receiveData.message === "操作成功"){
+            store.state.token = this.receiveData.data.access_token
+            store.commit('setRole', this.role)
+            store.commit('setUsername', this.formData.patientInfo.username)
+            store.commit('setToken', this.receiveData.data.access_token)
+            // 跳转至首页
+            this.$router.push({ name: 'HomeView' });
+          }
+        } catch (error) {
+          console.error("Error login", error);
+        }
 
-        // 注册成功，跳转首页
-        await this.$router.push({ name: 'HomeView' })
       }
       else if (this.role === 'doctor'){
         try {
@@ -113,8 +137,31 @@ export default defineComponent({
           })
 
           if(response.data.code === 200) {
-            // 注册成功，跳转首页
-            await this.$router.push({ name: 'HomeView' })
+            // 注册成功，自动登陆
+            try {
+              const response = await axios({
+                method: 'post',
+                url: 'http://121.43.108.102:8101/api/' + this.role + '/login',
+                data: {
+                  username: this.formData.doctorInfo.username,
+                  password: this.formData.doctorInfo.password,
+                },
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded'
+                }
+              })
+              this.receiveData = response.data;
+              if(this.receiveData.message === "操作成功"){
+                store.state.token = this.receiveData.data.access_token
+                store.commit('setRole', this.role)
+                store.commit('setUsername', this.formData.doctorInfo.username)
+                store.commit('setToken', this.receiveData.data.access_token)
+                // 跳转至首页
+                this.$router.push({ name: 'HomeView' });
+              }
+            } catch (error) {
+              console.error("Error login", error);
+            }
           }
 
         } catch (error) {

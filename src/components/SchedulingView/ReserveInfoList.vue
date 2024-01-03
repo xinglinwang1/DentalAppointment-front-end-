@@ -1,8 +1,8 @@
 <template>
   <el-alert
       v-if="successVisible"
-      title="取消成功"
-      type="success"
+      title="等待审核"
+      type="warning"
       center
       show-icon
       @close="changeError"
@@ -373,6 +373,9 @@ export default defineComponent({
         console.error("Error put appointment data:", error);
         this.errorVisible=false;
       }
+      this.getReserveInfoListAll().then(() => {
+        this.reserveInfoListForPaginat = this.reserveInfoListAll;
+      });
       this.cancelVisible = false;
     },
     // 点击页数后改变currentPage

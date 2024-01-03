@@ -39,7 +39,7 @@ export default defineComponent({
         try {
           // 获取医生信息
           const response = await axios.get(
-            "http://121.43.108.102:8101/api/doctor/id/" + appointment.doctorId
+            "http://121.43.108.102:8101/api/doctor/" + appointment.doctorId
           );
 
           // 更新预约信息中的医生名称
