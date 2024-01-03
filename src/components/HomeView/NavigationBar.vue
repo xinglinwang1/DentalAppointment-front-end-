@@ -5,10 +5,10 @@
     </div>
     <div class="navigate-menu">
       <el-menu
-        :default-active="activeIndex"
-        mode="horizontal"
-        :ellipsis="false"
-        @select="handleSelect"
+          :default-active="activeIndex"
+          mode="horizontal"
+          :ellipsis="false"
+          @select="handleSelect"
       >
         <el-menu-item index="1" @click="rollToLocation('首页')"><router-link to="/">首页</router-link></el-menu-item>
         <el-menu-item index="2" @click="rollToLocation('找医院')">找医院</el-menu-item>
@@ -18,10 +18,10 @@
     </div>
     <div class="search-box">
       <el-input
-        class="input-box"
-        v-model="input"
-        placeholder="Type something"
-        :prefix-icon="SearchIcon"
+          class="input-box"
+          v-model="input"
+          placeholder="Type something"
+          :prefix-icon="SearchIcon"
       />
     </div>
     <button class="search-button" @click="search()">搜索</button>
@@ -47,7 +47,7 @@ export default defineComponent({
     const activeIndex = ref('1');
     const input = ref('')
     const SearchIcon = computed(() => Search);
-    
+
     return {
       activeIndex,
       input,
@@ -66,7 +66,24 @@ export default defineComponent({
     },
     goToLogin() {
       // 使用 Vue Router 的 $router.push 方法进行页面跳转
-      this.$router.push({ name: 'LoginView' });
+      //this.$router.push({ name: 'LoginView' });
+      if(this.role === 'unAuthenticated') {
+        this.$router.push('/loginview')
+      }
+      else {
+        this.openMessageBox1();
+      }
+    },
+    openMessageBox1() {
+      ElMessageBox.alert('您已经登录！', 'Title', {
+        confirmButtonText: 'OK',
+        callback: (action) => {
+          ElMessage({
+            type: 'info',
+            message: `action: ${action}`,
+          });
+        },
+      });
     },
     logout() {
       store.commit('setRole', "unAuthenticated")
@@ -95,7 +112,7 @@ export default defineComponent({
       }
       setTimeout(() => {
         this.$nextTick(() => {
-            window.scrollTo(0, height)
+          window.scrollTo(0, height)
         })
       }, 100)
     },

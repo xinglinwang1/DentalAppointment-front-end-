@@ -1,14 +1,45 @@
 <template>
-  <router-link to="/loginview" class="reservation-container">
+  <!-- <router-link to="/loginview" class="reservation-container">
     <img id="reservation-image" src="../../assets/images/reservation.png" alt="no image">
     <span id="title">患者入口</span>
-  </router-link>
+  </router-link> -->
+  <div class="reservation-container" @click="jumpToView()">
+    <img id="reservation-image" src="../../assets/images/reservation.png" alt="no image">
+    <span id="title">患者入口</span>
+  </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { mapState } from 'vuex';
+
 export default defineComponent({
   name: 'ReservationBar',
+  computed: {
+    ...mapState(['role']),
+  },
+  methods: {
+    jumpToView() {
+      if(this.role === 'unAuthenticated') {
+        this.$router.push('/loginview')
+      }
+      else {
+        this.openMessageBox();
+      }
+    },
+    openMessageBox() {
+      ElMessageBox.alert('您已经登录！', 'Title', {
+        confirmButtonText: 'OK',
+        callback: (action) => {
+          ElMessage({
+            type: 'info',
+            message: `action: ${action}`,
+          });
+        },
+      });
+    },
+  }
 })
 </script>
 

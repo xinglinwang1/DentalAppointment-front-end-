@@ -116,15 +116,13 @@ export default defineComponent({
             // 注册成功，跳转首页
             await this.$router.push({ name: 'HomeView' })
           }
-          else {
-            this.$message({
-              message: "注册信息与医院信息不匹配！",
-              type: "error",
-            });
-          }
 
         } catch (error) {
-          console.error('Error changing patient data:', error);
+          console.log("1")
+          this.$message({
+            message: "注册信息与医院信息不匹配！",
+            type: "error",
+          });
         }
       }
 

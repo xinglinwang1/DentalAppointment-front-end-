@@ -1,14 +1,45 @@
 <template>
-  <router-link to="/loginview" class="doctor-entrance-container">
+  <!-- <router-link to="/loginview" class="doctor-entrance-container">
     <img class="doctor-image" src="../../assets/images/doctor.png" alt="no image">
     <span class="doctor-entrance-font">医生入口</span>
-  </router-link>
+  </router-link> -->
+  <div class="doctor-entrance-container" @click="jumpToView()">
+    <img class="doctor-image" src="../../assets/images/doctor.png" alt="no image">
+    <span class="doctor-entrance-font">医生入口</span>
+  </div>
 </template>
 
 <script>
 import {defineComponent} from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { mapState } from 'vuex';
+
 export default defineComponent({
-    name: 'DoctorEntrance',
+  name: 'DoctorEntrance',
+  computed: {
+    ...mapState(['role']),
+  },
+  methods: {
+    jumpToView() {
+      if(this.role === 'unAuthenticated') {
+        this.$router.push('/loginview')
+      }
+      else {
+        this.openMessageBox();
+      }
+    },
+    openMessageBox() {
+      ElMessageBox.alert('您已经登录！', 'Title', {
+        confirmButtonText: 'OK',
+        callback: (action) => {
+          ElMessage({
+            type: 'info',
+            message: `action: ${action}`,
+          });
+        },
+      });
+    },
+  }
 })
 </script>
 
