@@ -158,7 +158,7 @@ export default defineComponent({
       try {
         const response = await axios.get('http://118.195.236.254:8301/api/approval/doctor', {
           params: {
-            adminUsername: "ly",
+            adminUsername: store.state.username,
           },
         });
         this.医生 = response.data.data;
@@ -171,7 +171,7 @@ export default defineComponent({
       try {
         const response = await axios.get('http://118.195.236.254:8301/api/approval/patient', {
           params: {
-            adminUsername: "ly",
+            adminUsername: store.state.username,
           },
         });
         this.患者 = response.data.data;
@@ -222,6 +222,7 @@ export default defineComponent({
       const kindValue = listName;
       const judgeValue = 1;
       this.check_sendData(idValue, kindValue, judgeValue);
+      window.alert('审核通过');
     },
     async Reject(row, listName) {
       console.log('Edit row:', row, 'from list:', listName, 'Boolean Value:', false);
@@ -229,6 +230,7 @@ export default defineComponent({
       const kindValue = listName;
       const judgeValue = 0;
       this.check_sendData(idValue, kindValue, judgeValue);
+      window.alert('审核不通过');
     },
     async check_sendData(approvalId, kind, judge) {
       try {
