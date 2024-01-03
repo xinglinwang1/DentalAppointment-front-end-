@@ -12,7 +12,7 @@
     <ReservationBar/>
     <HospitalMap/>
     <ArticleSet/>
-    <VisitingExperts/>
+    <!-- <VisitingExperts/> -->
 
     <PageFooting/>
   </div>
@@ -24,7 +24,7 @@ import NavigationBar from '../components/HomeView/NavigationBar.vue'
 import NavigationMenu from '../components/HomeView/NavigationMenu.vue'
 import DoctorClassification from '../components/HomeView/DoctorClassification.vue'
 import ArticleSet from '../components/HomeView/ArticleSet.vue'
-import VisitingExperts from '../components/HomeView/VisitingExperts.vue'
+//import VisitingExperts from '../components/HomeView/VisitingExperts.vue'
 import DoctorEntrance from '../components/HomeView/DoctorEntrance.vue'
 import ReservationBar from '../components/HomeView/ReservationBar.vue'
 import HospitalMap from '../components/HomeView/HospitalsMap.vue'
@@ -39,7 +39,7 @@ export default defineComponent({
     NavigationMenu,
     DoctorClassification,
     ArticleSet,
-    VisitingExperts,
+    //VisitingExperts,
     DoctorEntrance,
     ReservationBar,
     HospitalMap,

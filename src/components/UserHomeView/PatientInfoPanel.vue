@@ -1,4 +1,5 @@
 <script lang="ts">
+/* eslint-disable */
 import {defineComponent} from 'vue'
 import {Clock, Iphone, Message, Tickets, User} from "@element-plus/icons-vue";
 import axios from "axios";
@@ -30,7 +31,7 @@ export default defineComponent({
   methods: {
     async getPatientData() {
       try {
-        const response = await axios.get('http://localhost:8101/api/patient/' + this.patient_username);
+        const response = await axios.get('http://121.43.108.102:8101/api/patient/' + this.patient_username);
         this.patient_info = response.data.data;
       } catch (error) {
         console.error('Error fetching patient data:', error);
@@ -47,7 +48,7 @@ export default defineComponent({
       try {
         const response = await axios({
           method: 'put',
-          url: 'http://localhost:8101/api/patient',
+          url: 'http://121.43.108.102:8101/api/patient',
           data: {
             username: this.patient_info.username,
             phone: this.patient_info.phone,

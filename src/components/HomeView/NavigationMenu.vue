@@ -1,6 +1,6 @@
 <template>
   <div class="navigation-menu-container">
-    <div class="left-area">
+    <!-- <div class="left-area">
       <span>首页</span>
     </div>
     <el-divider style="height: 100%" direction="vertical" />
@@ -39,7 +39,7 @@
         <el-divider direction="vertical" border-style="dashed" />
         <el-button type="primary">开放合作平台</el-button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -54,7 +54,7 @@ export default defineComponent({
 <style scoped>
 .navigation-menu-container {
   width: 75%;
-  height: 100px;
+  /* height: 100px; */
   margin: 80px auto 0;
   background-color: rgb(0, 140, 255);
   color: rgb(255, 255, 255);

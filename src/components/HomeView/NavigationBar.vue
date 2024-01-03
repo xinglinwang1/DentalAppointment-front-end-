@@ -1,7 +1,7 @@
 <template>
   <div class="navigation-bar-container">
     <div class="logo">
-      <img src="../../assets/images/logo.png" alt="no image" @click="this.$router.push({ name: 'HomeView' })">
+      <img src="../../assets/images/logo.png" alt="no image">
     </div>
     <div class="navigate-menu">
       <el-menu
@@ -10,12 +10,10 @@
         :ellipsis="false"
         @select="handleSelect"
       >
-        <el-menu-item index="1">首页</el-menu-item>
-        <el-menu-item index="2">找专家</el-menu-item>
-        <el-menu-item index="3">找医院</el-menu-item>
-        <el-menu-item index="4">查知识</el-menu-item>
-        <el-menu-item index="5">问诊</el-menu-item>
-        <el-menu-item index="6">预约</el-menu-item>
+        <el-menu-item index="1" @click="rollToLocation('首页')"><router-link to="/">首页</router-link></el-menu-item>
+        <el-menu-item index="2" @click="rollToLocation('找医院')">找医院</el-menu-item>
+        <el-menu-item index="3" @click="rollToLocation('找专家')">找专家</el-menu-item>
+        <el-menu-item index="4" @click="rollToLocation('查知识')">查知识</el-menu-item>
       </el-menu>
     </div>
     <div class="search-box">
@@ -28,16 +26,19 @@
     </div>
     <button class="search-button" @click="search()">搜索</button>
     <button class="login-button" @click="goToLogin()">登录 / 注册</button>
-    <img class="customer-service" src="../../assets/images/customer_service.png" alt="no image" @click="this.$router.push({ name: 'UserHomeView' })">
+    <img class="customer-service" src="../../assets/images/person_center.png" alt="no image" @click="toUserHomeView">
     <div class="clearfix"> </div>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue';
 import { ref, computed } from 'vue'
 import { Search } from '@element-plus/icons-vue'
-import { ElMessageBox } from 'element-plus';
+import store from "@/store";
+import { mapState } from 'vuex';
+import { ElMessage, ElMessageBox } from 'element-plus';
+
 
 export default defineComponent({
   name: 'NavigationBar',
@@ -66,6 +67,60 @@ export default defineComponent({
       // 使用 Vue Router 的 $router.push 方法进行页面跳转
       this.$router.push({ name: 'LoginView' });
     },
+    rollToLocation(location) {
+
+      let height;
+      if(location == '首页') {
+        height = 0
+      }
+      else if(location == '找医院') {
+        height = 30
+      }
+      else if(location == '找专家') {
+        height = document.body.scrollHeight
+      }
+      else {
+        height = 200
+      }
+      setTimeout(() => {
+        this.$nextTick(() => {
+            window.scrollTo(0, height)
+        })
+      }, 100)
+    },
+    openMessageBox() {
+      ElMessageBox.alert('请先登录！', 'Title', {
+        // if you want to disable its autofocus
+        // autofocus: false,
+        confirmButtonText: 'OK',
+        callback: (action) => {
+          ElMessage({
+            type: 'info',
+            message: `action: ${action}`,
+          });
+        },
+      });
+    },
+    toUserHomeView() {
+      console.log(this.role)
+      switch (this.role) {
+        case 'patient':
+          this.$router.push('/user');
+          break;
+        case 'doctor':
+          this.$router.push('/doctorHome');
+          break;
+        case 'admin':
+          this.$router.push('/admin');
+          break;
+        default:
+          this.openMessageBox()
+          break;
+      }
+    },
+  },
+  computed: {
+    ...mapState(['role']),
   },
 });
 </script>
@@ -149,5 +204,8 @@ export default defineComponent({
 .clearfix {
   height: 32px;
   clear: both;
+}
+a {
+  text-decoration: none;
 }
 </style>

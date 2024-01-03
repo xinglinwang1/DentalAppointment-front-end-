@@ -6,7 +6,7 @@
 <template>
   <div>
     <NavigationBar/>
-    <DoctorInfo :doctorname="doctorname"/>
+    <ScheduleDoctorInfo :doctorname="doctorname"/>
     <ReserveInfoList :doctorname="doctorname"/>
     <PageFooting/>
   </div>
@@ -17,7 +17,7 @@ import { defineComponent } from 'vue';
 
 import NavigationBar from '../components/HomeView/NavigationBar.vue'
 import PageFooting from '../components/HomeView/PageFooting.vue'
-import DoctorInfo from "@/components/DoctorView/DoctorInfo.vue";
+import ScheduleDoctorInfo from "../components/SchedulingView/ScheduleDoctorInfo.vue";
 import ReserveInfoList from '../components/SchedulingView/ReserveInfoList.vue'
 
 export default defineComponent({
@@ -25,7 +25,7 @@ export default defineComponent({
     components: {
       NavigationBar,
       PageFooting,
-      DoctorInfo,
+      ScheduleDoctorInfo,
       ReserveInfoList,
     },
     data() {

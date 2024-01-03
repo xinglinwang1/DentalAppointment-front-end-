@@ -1,4 +1,5 @@
 <script lang="ts">
+/* eslint-disable */
 import {defineComponent} from 'vue'
 import axios from "axios";
 
@@ -54,7 +55,7 @@ export default defineComponent({
         try {
           const response = await axios({
             method: 'post',
-            url: 'http://localhost:8101/api/patient/register',
+            url: 'http://121.43.108.102:8101/api/patient/register',
             data: {
               username: this.formData.patientInfo.username,
               password: this.formData.patientInfo.password,

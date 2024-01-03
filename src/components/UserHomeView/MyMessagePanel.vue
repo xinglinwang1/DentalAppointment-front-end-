@@ -6,7 +6,7 @@ import store from "@/store";
 export default defineComponent({
   name: "MyMessagePanel",
   mounted() {
-    this.getAppointments()
+    this.getMessages()
   },
   methods: {
     handleSizeChange(size: number) {
@@ -15,11 +15,11 @@ export default defineComponent({
     handlePageChange(currentPage: number) {
       this.currentPage = currentPage;
     },
-    async getAppointments() {
+    async getMessages() {
       try {
         const response = await axios({
           method: 'post',
-          url: 'http://localhost:8302/api/message/get_usermessage',
+          url: 'http://47.117.145.92:8302/api/message/get_usermessage',
           data: {
             username: store.state.username,
           },

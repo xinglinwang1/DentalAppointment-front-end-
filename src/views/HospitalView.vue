@@ -18,6 +18,12 @@ export default defineComponent({
     HospitalInfo,
     DoctorList
   },
+  // props: {
+  //   hospitalId: {
+  //     type: String,
+  //     required: true,
+  //   },
+  // },
   data() {
     return {
       hospitalId: this.$route.params.id,

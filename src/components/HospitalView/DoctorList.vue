@@ -29,7 +29,7 @@ export default defineComponent({
   
   mounted() {
     // 获取所有的预约数据
-    this.getDoctorAllList(1)
+    this.getDoctorAllList(this.hospitalId)
       .then(() => {
         this.doctorListForPaginat = this.doctorAllList;
       });
@@ -122,7 +122,7 @@ export default defineComponent({
     getDoctorAllList(hospitalId){
       return new Promise((resolve, reject) => {
         //TODO:1为hospitalId,后期再修改
-        axios.get(`http://localhost:8101/api/doctor/getByHospital/${hospitalId}`)
+        axios.get(`http://121.43.108.102:8101/api/doctor/getByHospital/${hospitalId}`)
           .then(response => {
             this.doctorAllList = response.data.data;
             console.log(this.doctorAllList);
@@ -171,7 +171,7 @@ export default defineComponent({
     <div class="doc-container">
       <ul class="doc-list">
         <li v-for="doctor in paginatedDoctorList" :key="doctor.name" class="item">
-          <router-link :to="{ name: 'DoctorView', params: { doctorname: doctor.id ,hospitalId:hospitalId} }">
+          <router-link :to="{ name: 'DoctorView', params: { doctorname: doctor.id }, query: { hospitalId: this.hospitalId } }">
             <a class="doctor-card">
               <div class="img-wrap">
                 <img v-bind:src= doctor.photoUrl

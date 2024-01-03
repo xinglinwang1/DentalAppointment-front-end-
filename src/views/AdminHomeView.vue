@@ -21,136 +21,168 @@
         <!-- Element UI Tab 组件 -->
         <el-tabs v-model="activeTab" type="border-card" style="height: 100%">
 
-          <!-- 表格组件：医生信息 -->
-          <el-table v-if="activeTab === 'doctor-info'" :data="医生" style="width: 100%">
-            <!-- 表格列定义，根据实际数据结构进行调整 -->
-            <el-table-column label="ID" prop="id"></el-table-column>
-            <el-table-column label="医生用户名" prop="doctorUsername"></el-table-column>
-            <el-table-column label="预约ID" prop="orderId"></el-table-column>
-            <el-table-column label="管理员用户名" prop="adminUsername"></el-table-column>
-            <el-table-column label="取消原因" prop="cancelReason"></el-table-column>
-            <el-table-column label="审核状态" prop="auditStatus"></el-table-column>
-            <el-table-column label="操作">
-              <template #default="scope">
-                <!-- 使用 v-model 替代 .sync -->
-                <el-button type="text" @click="Allow(scope.row, '医生')" style="color: rgb(1, 255, 1);">√</el-button>
-                <!-- 添加自定义按钮 -->
-                <el-button type="text" @click="Reject(scope.row, '医生')" style="color: rgb(255, 2, 2);">×</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- 分页组件 -->
-          <el-pagination v-if="医生.length > pageSize" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]"
-            :page-size="pageSize" :total="医生.length" @size-change="handleSizeChange"
-            @current-change="handlePageChange"></el-pagination>
+          <div class="table_doctor">
+            <!-- 表格组件：医生信息 -->
+            <el-table v-if="activeTab === 'doctor-info'" :data="paginatedReserveInfoList_Doctor" stripe style="width: 100%">
+              <!-- 表格列定义，根据实际数据结构进行调整 -->
+              <el-table-column label="ID" prop="id"></el-table-column>
+              <el-table-column label="医生用户名" prop="doctorUsername"></el-table-column>
+              <el-table-column label="预约ID" prop="orderId"></el-table-column>
+              <el-table-column label="管理员用户名" prop="adminUsername"></el-table-column>
+              <el-table-column label="取消原因" prop="cancelReason"></el-table-column>
+              <el-table-column label="审核状态" prop="auditStatus"></el-table-column>
+              <el-table-column label="操作">
+                <template #default="scope">
+                  <!-- 使用 v-model 替代 .sync -->
+                  <el-button type="text" @click="Allow(scope.row, '医生')" style="color: rgb(1, 255, 1);">√</el-button>
+                  <!-- 添加自定义按钮 -->
+                  <el-button type="text" @click="Reject(scope.row, '医生')" style="color: rgb(255, 2, 2);">×</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- 分页组件 -->
+            <div class="pagination_d">
+              <div class="doctor">
+                <el-pagination :hide-on-single-page="true" :current-page="currentPage_doctor" :page-size="pageSize_doctor"
+                 layout="prev, pager, next, jumper"
+                  :total="Doctor_display.length"
+                  @current-change="handleCurrentChange_doctor" />
+              </div>
+            </div>
+          </div>
 
 
-          <!-- 第二个 Tab 标签：新接口返回的数据 -->
+          <div class="table_patient">
+            <!-- 表格组件：新接口返回的数据 -->
+            <el-table v-if="activeTab === 'patient-info'" :data="paginatedReserveInfoList_Patient" stripe style="width: 100%">
+              <!-- 表格列定义，与第一个表格一致 -->
+              <el-table-column label="ID" prop="id"></el-table-column>
+              <el-table-column label="患者用户名" prop="patientUsername"></el-table-column>
+              <el-table-column label="预约ID" prop="orderId"></el-table-column>
+              <el-table-column label="管理员用户名" prop="adminUsername"></el-table-column>
+              <el-table-column label="取消原因" prop="cancelReason"></el-table-column>
+              <el-table-column label="审核状态" prop="auditStatus"></el-table-column>
+              <el-table-column label="操作">
+                <template #default="scope">
+                  <!-- 使用 v-model 替代 .sync -->
+                  <el-button type="text" @click="Allow(scope.row, '患者')" style="color: rgb(1, 255, 1);">√</el-button>
+                  <el-button type="text" @click="Reject(scope.row, '患者')" style="color: rgb(255, 2, 2);">×</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <!-- 分页组件 -->
+            <div class="pagination_p">
+              <div class="patient">
+                <el-pagination 
+                :hide-on-single-page="true"
+                :current-page="currentPage_patient" 
+                :page-size="pageSize_patient"
+                layout="prev, pager, next, jumper"
+                :total="Patient_display.length" 
+                @current-change="handleCurrentChange_patient" />
+              </div>
+            </div>
+          </div>
 
-          <!-- 表格组件：新接口返回的数据 -->
-          <el-table v-if="activeTab === 'patient-info'" :data="患者" style="width: 100%">
-            <!-- 表格列定义，与第一个表格一致 -->
-            <el-table-column label="ID" prop="id"></el-table-column>
-            <el-table-column label="患者用户名" prop="patientUsername"></el-table-column>
-            <el-table-column label="预约ID" prop="orderId"></el-table-column>
-            <el-table-column label="管理员用户名" prop="adminUsername"></el-table-column>
-            <el-table-column label="取消原因" prop="cancelReason"></el-table-column>
-            <el-table-column label="审核状态" prop="auditStatus"></el-table-column>
-            <el-table-column label="操作">
-              <template #default="scope">
-                <!-- 使用 v-model 替代 .sync -->
-                <el-button type="text" @click="Allow(scope.row, '患者')" style="color: rgb(1, 255, 1);">√</el-button>
-
-                <el-button type="text" @click="Reject(scope.row, '患者')" style="color: rgb(255, 2, 2);">×</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <!-- 分页组件 -->
-          <el-pagination v-if="患者.length > pageSize" :current-page="newApiCurrentPage" :page-sizes="[10, 20, 30, 40]"
-            :page-size="pageSize" :total="患者.length" @size-change="handleSizeChange"
-            @current-change="handleNewApiPageChange"></el-pagination>
-
-
-          <!-- 其他 Tab 标签 -->
-          <!-- 可根据需要添加更多的标签页 -->
         </el-tabs>
       </el-main>
     </el-container>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue';
+// import NavigationBar from '../components/HomeView/NavigationBar.vue'
 import axios from 'axios';
+import store from '@/store'
 
 export default defineComponent({
+  name: 'AdminHomelView',
+  components: {
+    // NavigationBar
+  },
   data() {
     return {
       activeTab: 'doctor-info',
       医生: [],
       患者: [],
-      currentPage: 1,
-      newApiCurrentPage: 1,
-      pageSize: 10,
+      Patient_display: [],
+      Doctor_display: [],
+      currentPage_patient: 1,
+      currentPage_doctor: 1,
+      pageSize_patient: 10,
+      pageSize_doctor: 10,
     };
   },
   mounted() {
     this.getDoctorData();
     this.getPatientData();
   },
+  computed: {
+    // 分页预约数据
+    paginatedReserveInfoList_Patient() {
+      const start = (this.currentPage_patient - 1) * this.pageSize_patient;
+      const end = start + this.pageSize_patient;
+      return this.Patient_display.slice(start, end);
+    },
+    paginatedReserveInfoList_Doctor() {
+      const start = (this.currentPage_doctor - 1) * this.pageSize_doctor;
+      const end = start + this.pageSize_doctor;
+      return this.Doctor_display.slice(start, end);
+    },
+  },
   methods: {
     async getDoctorData() {
       try {
-        const response = await axios.get('http://localhost:8301/api/approval/doctor', {
+        const response = await axios.get('http://118.195.236.254:8301/api/approval/doctor', {
           params: {
-            adminUsername: 'ly',
+            adminUsername: store.state.username,
           },
         });
         this.医生 = response.data.data;
+        this.Doctor_display=this.医生;
       } catch (error) {
         console.error('Error fetching patient data:', error);
       }
     },
     async getPatientData() {
       try {
-        const response = await axios.get('http://localhost:8301/api/approval/patient', {
+        const response = await axios.get('http://118.195.236.254:8301/api/approval/patient', {
           params: {
-            adminUsername: 'ly',
+            adminUsername: store.state.username,
           },
         });
         this.患者 = response.data.data;
+        this.Patient_display=this.患者;
       } catch (error) {
         console.error('Error fetching new API data:', error);
       }
     },
-    handleSizeChange(size: number) {
-      this.pageSize = size;
+    handleCurrentChange_patient(newPage) {
+      this.currentPage_patient = newPage;
     },
-    handlePageChange(currentPage: number) {
-      this.currentPage = currentPage;
+    handleCurrentChange_doctor(newPage) {
+      this.currentPage_doctor = newPage;
     },
-    handleNewApiPageChange(newApiCurrentPage: number) {
-      this.newApiCurrentPage = newApiCurrentPage;
-    },
-    async Allow(row: any, listName: string) {
+    async Allow(row, listName) {
       console.log('Edit row:', row, 'from list:', listName, 'Boolean Value:', true);
       const idValue = row.id;
       const kindValue = listName;
       const judgeValue = 1;
       this.check_sendData(idValue, kindValue, judgeValue);
     },
-    async Reject(row: any, listName: string) {
+    async Reject(row, listName) {
       console.log('Edit row:', row, 'from list:', listName, 'Boolean Value:', false);
       const idValue = row.id;
       const kindValue = listName;
       const judgeValue = 0;
       this.check_sendData(idValue, kindValue, judgeValue);
     },
-    async check_sendData(approvalId: number, kind: string, judge: number) {
+    async check_sendData(approvalId, kind, judge) {
       try {
         const response = await axios({
           method: 'put',
-          url: 'http://localhost:8301/api/approval/checkresult',
+          url: 'http://118.195.236.254:8301/api/approval/checkresult',
           data: {
             approvalId: approvalId,
             kind: kind,
@@ -177,7 +209,9 @@ export default defineComponent({
         console.error('Error sending data:', error);
       }
     },
-    handleSelect(key: string) {
+    handleSelect(key) {
+      this.currentPage_patient=1;
+      this.currentPage_doctor=1;
       this.activeTab = key === '1' ? 'doctor-info' : 'patient-info';
     },
   },

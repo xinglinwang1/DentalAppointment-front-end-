@@ -8,6 +8,7 @@
  
 <script>
 /* eslint-disable */
+import axios from 'axios';
 import AMapLoader from '@amap/amap-jsapi-loader'
 export default {
     name: 'HospitalMap',
@@ -15,7 +16,14 @@ export default {
     return {
       map: null,
       placeSearch: null,
-      mapModule: null // AMap
+      mapModule: null, // AMap
+      marker1: null,
+      marker2: null,
+      marker3: null,
+      infoWindow: null,
+      latitudes: [],
+      longitudes: [],
+      hospitalInfoList: [],
     }
   },
   mounted() {
@@ -24,6 +32,8 @@ export default {
     }
     // 初始化地图
     this.initAMap()
+    // 加载页面时获取所有医院的信息列表
+    this.loadHospitalInfo();
   },
   destroyed() {
     // 销毁地图
@@ -50,6 +60,7 @@ export default {
             //center: [121.21362611,31.28576211],
             resizeEnable: true
           })
+          
           // 添加控件
           AMap.plugin(
             [
@@ -77,6 +88,50 @@ export default {
               map.addControl(new AMap.Geolocation())
             }
           )
+          
+          // 添加点覆盖物，表示医院的位置
+          this.marker1 = new AMap.Marker({
+            icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+            position: [this.latitudes[0], this.longitudes[0]]
+          });
+          this.marker2 = new AMap.Marker({
+            icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+            position: [this.latitudes[1], this.longitudes[1]]
+          });
+          this.marker3 = new AMap.Marker({
+            icon: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+            position: [this.latitudes[2], this.longitudes[2]]
+          });
+          map.add(this.marker1)
+          map.add(this.marker2)
+          map.add(this.marker3)
+
+          // 设置地图的显示范围
+          var mybounds = new AMap.Bounds([121.245777,31.301068], [121.187412,31.253973]);
+          map.setBounds(mybounds);
+
+          // 鼠标移入覆盖物，显示医院的名称
+          this.marker1.on('mouseover', () => {
+            this.openInfo(1);
+          });
+          this.marker2.on('mouseover', () => {
+            this.openInfo(2);
+          });
+          this.marker3.on('mouseover', () => {
+            this.openInfo(3);
+          });
+
+          // 鼠标点击覆盖物，跳转到对应医院的页面
+          this.marker1.on('click', () => {
+            this.toHospitalPage(1);
+          });
+          this.marker2.on('click', () => {
+            this.toHospitalPage(2);
+          });
+          this.marker3.on('click', () => {
+            this.toHospitalPage(3);
+          });
+
           _this.map = map
           // 搜索功能
           _this.toSearch()
@@ -85,6 +140,41 @@ export default {
           console.log(e)
         })
     },
+    
+    // 打开信息窗体，显示医院信息
+    openInfo(hospitalID) {
+      // 检查地图是否已初始化
+      if (this.map) {
+        // 构建信息窗体中显示的内容
+        var info = [];
+        info.push("<div class='input-card content-window-card'><div><img style=\"float:left;\" src=\" https://webapi.amap.com/images/autonavi.png \"/></div> ");
+        info.push(this.hospitalInfoList[hospitalID - 1].hospitalName)
+  
+        this.infoWindow = new AMap.InfoWindow({
+          content: info.join(""), // 使用默认信息窗体框样式，显示信息内容
+        });
+
+        if(hospitalID == 1){
+          this.infoWindow.open(this.map,  this.marker1.getPosition());
+        }
+        else if(hospitalID == 2) {
+          this.infoWindow.open(this.map,  this.marker2.getPosition());
+        }
+        else {
+          this.infoWindow.open(this.map,  this.marker3.getPosition());
+        }
+      }
+      else{
+        console.log("map为空")
+      }
+    },
+
+    // 跳转到医院详情页
+    toHospitalPage(hospitalID) {
+      this.$router.push({ name: 'HospitalView', params: { id: hospitalID } }); 
+    },
+    
+    // 搜索地名
     toSearch() {
       const _this = this
       // 实例化AutoComplete
@@ -104,7 +194,37 @@ export default {
       })
       placeSearch.setCity(e.poi.adcode)
       placeSearch.search(e.poi.name) // 关键字查询查询
-    }
+    },
+
+
+    // 获取医院信息列表
+    async loadHospitalInfo() {
+      // 使用 this.$http 进行网络请求
+      try {
+        const response = await axios.get('http://118.195.236.254:8401/api/hospital/');
+        console.log(response.data.code)
+        if (response.data.code) {
+          this.hospitalInfoList = response.data.data;
+          console.log(this.hospitalInfoList);
+
+          this.hospitalInfoList.forEach(hospitalInfo => {
+            const positionArray = hospitalInfo.position.split(',');
+            const latitude = parseFloat(positionArray[0]);
+            const longitude = parseFloat(positionArray[1]);
+          
+            this.latitudes.push(latitude);
+            this.longitudes.push(longitude);
+          });
+          // 打印结果
+          // console.log("Latitudes:", this.latitudes);
+          // console.log("Longitudes:", this.longitudes);
+        } else {
+          this.$message.error(response.data.message);
+        }
+      } catch (error) {
+        console.log('网络请求失败：', error);
+      }
+    },
 }
 }
 </script>
@@ -144,4 +264,32 @@ export default {
   float: left;
   font-family: "微软雅黑";
 }
+
+
+
+html, body, #container {
+            height: 100%;
+            width: 100%;
+        }
+
+        .custom-input-card{
+            width: 18rem;
+        }
+
+        .custom-input-card .btn:last-child{
+            margin-left: 1rem;
+        }
+
+        .content-window-card{
+            position: relative;
+            width: 23rem;
+            padding: 0.75rem 0 0 1.25rem;
+            box-shadow: none;
+            bottom: 0;
+            left: 0;
+        }
+
+        .content-window-card p{
+            height: 2rem;
+        }
 </style>

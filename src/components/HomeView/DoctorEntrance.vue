@@ -1,8 +1,8 @@
 <template>
-  <div class="doctor-entrance-container" @click="this.$router.push({ name: 'DoctorHomeView' })">
+  <router-link to="/loginview" class="doctor-entrance-container">
     <img class="doctor-image" src="../../assets/images/doctor.png" alt="no image">
     <span class="doctor-entrance-font">医生入口</span>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -22,6 +22,7 @@ export default defineComponent({
   float: left;
   display: flex;
   align-items: center;
+  text-decoration: none; /* 去掉链接的下划线 */
 }
 
 .doctor-image {

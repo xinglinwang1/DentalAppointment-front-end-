@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
+import axios from "axios";
 export default defineComponent({
   name: 'HospitalInfo',
   props: {
@@ -8,15 +9,27 @@ export default defineComponent({
       required: true,
     },
   },
+  mounted() {
+    this.getHospitalInfo();
+  },
+  methods: {
+    async getHospitalInfo() {
+      try {
+        const response = await axios.get('http://118.195.236.254:8401/api/hospital/' + this.hospitalId);
+        this.hospitalInfo = response.data.data;
+      } catch (error) {
+        console.error('Error fetching hospital data:', error);
+      }
+    },
+  },
   data() {
     return {
       hospitalInfo: {
-        hospitalId: "hospital123",
-        name: "医院名医院名医院名",
-        introduction: "简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介",
-        location: "City, Country",
-        contact: "123-456-7890",
-        departments: ["Dentistry", "Orthopedics", "Cardiology"],
+        id: "",
+        hospitalName: "",
+        introduction: "",
+        position: "",
+        photo: "",
       },
 
     }
@@ -25,9 +38,15 @@ export default defineComponent({
 </script>
 
 <template>
+
   <div class="hospitalIntro-container">
-    <h1 class="hospital-name">{{ hospitalInfo.name }}</h1>
-    <div class="hospital-intro">{{ hospitalInfo.introduction }}</div>
+    <div style="width: 30% ;height:95%;float:left">
+      <img :src="hospitalInfo.photo" alt="photo" class="avatar" style="width: 90% ;height: 90%;margin:auto 2%">
+    </div>
+    <div style="width: 65%;float:left; margin-top:30px;margin-right:3%">
+      <h1 class="hospital-name">{{ hospitalInfo.hospitalName }}</h1>
+      <div class="hospital-intro">{{ hospitalInfo.introduction }}</div>
+    </div>
   </div>
 </template>
 
@@ -35,8 +54,8 @@ export default defineComponent({
 .hospitalIntro-container {
   width: 1100px;
   margin: 80px auto 0;
-  min-height: 120px;
-  padding: 30px 50px;
+  height: 220px;
+  /* padding: 30px 50px; */
   position: relative;
   background: url("//fe1.hdfimg.com/nhospital/static/img/pc_banner_bg.c2801e3d.png") no-repeat;
   background-size: 1212px auto;
