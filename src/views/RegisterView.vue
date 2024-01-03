@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 /* eslint-disable */
 import {defineComponent} from 'vue'
 import axios from "axios";
@@ -24,9 +24,11 @@ export default defineComponent({
           password: '',
           phone: '',
           email: '',
+          department: '',
           hospitalId: null,
           name: '',
-          jobNumber: '',
+          jobNumber: null,
+          photoUrl: '',
         },
         adminInfo: {
           username: '',
@@ -44,7 +46,16 @@ export default defineComponent({
         { id: 2, name: '圣伊丽莎白' },
         { id: 3, name: '安康综合医院' },
       ],
-
+      departments: [
+        { name: '口腔领面外科' },
+        { name: '牙体牙髓科' },
+        { name: '口腔修复科' },
+        { name: '口腔正畸科' },
+        { name: '急诊综合诊疗中心' },
+        { name: '儿童口腔科' },
+        { name: '牙周科' },
+        { name: '口腔种植中心' },
+      ]
     }
   },
   methods: {
@@ -65,18 +76,59 @@ export default defineComponent({
               name: this.formData.patientInfo.name,
               gender: this.formData.patientInfo.gender,
               birthday: this.formData.patientInfo.birthday,
+
             },
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
             }
           })
+
+        } catch (error) {
+          console.error('Error changing patient data:', error);
+        }
+
+
+        // 注册成功，跳转首页
+        await this.$router.push({ name: 'HomeView' })
+      }
+      else if (this.role === 'doctor'){
+        try {
+          const response = await axios({
+            method: 'post',
+            url: 'http://121.43.108.102:8101/api/doctor/register',
+            data: {
+              username: this.formData.doctorInfo.username,
+              password: this.formData.doctorInfo.password,
+              phone: this.formData.doctorInfo.phone,
+              email: this.formData.doctorInfo.email,
+              hospitalId: parseInt(this.formData.doctorInfo.hospitalId),
+              name: this.formData.doctorInfo.name,
+              jobNumber: parseInt(this.formData.doctorInfo.jobNumber),
+              department: this.formData.doctorInfo.department,
+              photoUrl: 'https://n1.hdfimg.com/g8/M06/61/B0/t4YBAGA3rhKATuABAATKzxQOiEA569_200_200_1.png?cfa2'
+            },
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          })
+
+          if(response.data.code === 200) {
+            // 注册成功，跳转首页
+            await this.$router.push({ name: 'HomeView' })
+          }
+          else {
+            this.$message({
+              message: "注册信息与医院信息不匹配！",
+              type: "error",
+            });
+          }
+
         } catch (error) {
           console.error('Error changing patient data:', error);
         }
       }
 
-      // 注册成功，跳转首页
-      await this.$router.push({ name: 'HomeView' })
+
     },
 
   },
@@ -127,6 +179,9 @@ export default defineComponent({
         </el-select>
         <el-input v-model="formData.doctorInfo.name" placeholder="医生姓名"></el-input>
         <el-input v-model="formData.doctorInfo.jobNumber" placeholder="工号"></el-input>
+        <el-select v-model="formData.doctorInfo.department" placeholder="选择科室">
+          <el-option v-for="department in departments" :key="department.name" :label="department.name" :value="department.name"></el-option>
+        </el-select>
         <!-- 其他医生信息字段... -->
       </el-form-item>
 
