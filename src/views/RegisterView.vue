@@ -40,9 +40,9 @@ export default defineComponent({
         // 其他角色的信息字段...
       },
       hospitals: [ // 医院选项数据，根据实际情况修改
-        { id: 1, name: '医院1' },
-        { id: 2, name: '医院2' },
-        // 其他医院...
+        { id: 1, name: '健康之家医院' },
+        { id: 2, name: '圣伊丽莎白' },
+        { id: 3, name: '安康综合医院' },
       ],
 
     }

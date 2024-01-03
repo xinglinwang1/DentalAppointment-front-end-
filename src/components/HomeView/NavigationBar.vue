@@ -26,6 +26,7 @@
     </div>
     <button class="search-button" @click="search()">搜索</button>
     <button class="login-button" @click="goToLogin()">登录 / 注册</button>
+    <button class="login-button" @click="logout()">登出</button>
     <img class="customer-service" src="../../assets/images/person_center.png" alt="no image" @click="toUserHomeView">
     <div class="clearfix"> </div>
   </div>
@@ -66,6 +67,16 @@ export default defineComponent({
     goToLogin() {
       // 使用 Vue Router 的 $router.push 方法进行页面跳转
       this.$router.push({ name: 'LoginView' });
+    },
+    logout() {
+      store.commit('setRole', "unAuthenticated")
+      store.commit('setUsername', "")
+      store.commit('setToken', "")
+      this.$router.push({ name: 'HomeView' });
+      this.$message({
+        message: "退出登陆",
+        type: "success",
+      });
     },
     rollToLocation(location) {
 
