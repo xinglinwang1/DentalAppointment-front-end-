@@ -95,16 +95,6 @@ export default defineComponent({
         type: "success",
       });
     },
-    logout() {
-      store.commit('setRole', "unAuthenticated")
-      store.commit('setUsername', "")
-      store.commit('setToken', "")
-      this.$router.push({ name: 'HomeView' });
-      this.$message({
-        message: "退出登陆",
-        type: "success",
-      });
-    },
     rollToLocation(location) {
 
       let height;

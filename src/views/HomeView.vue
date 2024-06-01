@@ -15,6 +15,7 @@
     <!-- <VisitingExperts/> -->
 
     <PageFooting/>
+    <AIEntrance/>
   </div>
 </template>
 
@@ -30,6 +31,8 @@ import ReservationBar from '../components/HomeView/ReservationBar.vue'
 import HospitalMap from '../components/HomeView/HospitalsMap.vue'
 
 import PageFooting from '../components/HomeView/PageFooting.vue'
+
+import AIEntrance from '../components/AI/AIEntrance.vue'
 import store from "@/store";
 
 export default defineComponent({
@@ -45,6 +48,7 @@ export default defineComponent({
     HospitalMap,
 
     PageFooting,
+    AIEntrance,
   },
   mounted() {
     console.log(store.state.role)
