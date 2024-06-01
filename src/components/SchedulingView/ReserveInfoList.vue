@@ -1,8 +1,8 @@
 <template>
   <el-alert
       v-if="successVisible"
-      title="取消成功"
-      type="success"
+      title="等待审核"
+      type="warning"
       center
       show-icon
       @close="changeError"
@@ -86,8 +86,8 @@
 
     <!-- 病历 -->
     <el-dialog v-model="caseVisible" width="60%" title="患者病历" align-center>
-      <div v-for="pcase in patientCase" :key="pcase.id">
-        <div>单号：{{ pcase.id }}</div>
+      <div v-for="pcase in patientCase" :key="pcase.caseId">
+        <div>单号：{{ pcase.caseId }}</div>
         <div>时间：{{ pcase.createTime }}</div>
         <div>诊断结果：{{ pcase.checkResult }}</div>
         <div>治疗结果：{{ pcase.treatment }}</div>
@@ -169,6 +169,7 @@ export default defineComponent({
       patientCase: [],
       //医生用户名
       doctorUsername: "",
+      hospitalId:'',
       //
       successVisible:false,
       errorVisible:false,
@@ -176,7 +177,7 @@ export default defineComponent({
   },
   mounted() {
     //取得医生信息
-    //   this.getDoctorInfo(this.doctorname)
+      this.getDoctorInfo(this.doctorname)
     // .then(() => {
     this.getReserveInfoListAll().then(() => {
       this.reserveInfoListForPaginat = this.reserveInfoListAll;
@@ -284,10 +285,11 @@ export default defineComponent({
     getDoctorInfo(doctorId) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`http://121.43.108.102:8101/api/doctor/id/${doctorId}`)
+          .get(`http://121.43.108.102:8101/api/doctor/${doctorId}`)
 
           .then((response) => {
             this.doctorUsername = response.data.data.username;
+            this.hospitalId=response.data.data.hospitalId;
             console.log(this.doctorUsername);
             resolve(); // 执行resolve函数表示异步操作完成
           })
@@ -373,6 +375,9 @@ export default defineComponent({
         console.error("Error put appointment data:", error);
         this.errorVisible=false;
       }
+      this.getReserveInfoListAll().then(() => {
+        this.reserveInfoListForPaginat = this.reserveInfoListAll;
+      });
       this.cancelVisible = false;
     },
     // 点击页数后改变currentPage
@@ -437,10 +442,9 @@ export default defineComponent({
       });
     },
     getPatientCase(patientIdNum) {
-      //TODO:参数之后改
       axios
         .get(
-          `http://118.195.236.254:8401/api/hospital/3/medical-record/${patientIdNum}`
+          `http://118.195.236.254:8401/api/hospital/${this.hospitalId}/medical-record/${patientIdNum}`
         )
         .then((response) => {
           this.patientCase = response.data.data;

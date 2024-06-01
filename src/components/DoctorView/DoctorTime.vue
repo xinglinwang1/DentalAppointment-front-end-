@@ -136,7 +136,7 @@ export default defineComponent({
           url: 'http://121.43.108.102:8201/api/appointment/book',
           data: {
             patientId:  store.state.username,
-            doctorId: this.doctorname,
+            doctorId: this.doctorInfo.username,
             clinicTime: this.formattedChosenDate + "T" + this.chosenTime + ":00",
             orderDepartment: this.doctorInfo.department,
             diseaseDescription: this.formInline.user,

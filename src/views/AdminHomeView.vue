@@ -24,7 +24,7 @@
           <div class="table_doctor">
             <!-- 表格组件：医生信息 -->
             <el-table v-if="activeTab === 'doctor-info'" :data="paginatedReserveInfoList_Doctor" stripe
-              style="width: 100%">
+                      style="width: 100%">
               <!-- 表格列定义，根据实际数据结构进行调整 -->
               <el-table-column label="ID" prop="id"></el-table-column>
               <el-table-column label="医生用户名" prop="doctorUsername"></el-table-column>
@@ -50,8 +50,8 @@
             <div class="pagination_d">
               <div class="doctor">
                 <el-pagination :hide-on-single-page="true" :current-page="currentPage_doctor" :page-size="pageSize_doctor"
-                  layout="prev, pager, next, jumper" :total="Doctor_display.length"
-                  @current-change="handleCurrentChange_doctor" />
+                               layout="prev, pager, next, jumper" :total="Doctor_display.length"
+                               @current-change="handleCurrentChange_doctor" />
               </div>
             </div>
           </div>
@@ -60,7 +60,7 @@
           <div class="table_patient">
             <!-- 表格组件：新接口返回的数据 -->
             <el-table v-if="activeTab === 'patient-info'" :data="paginatedReserveInfoList_Patient" stripe
-              style="width: 100%">
+                      style="width: 100%">
               <!-- 表格列定义，与第一个表格一致 -->
               <el-table-column label="ID" prop="id"></el-table-column>
               <el-table-column label="患者用户名" prop="patientUsername"></el-table-column>
@@ -80,8 +80,8 @@
             <div class="pagination_p">
               <div class="patient">
                 <el-pagination :hide-on-single-page="true" :current-page="currentPage_patient"
-                  :page-size="pageSize_patient" layout="prev, pager, next, jumper" :total="Patient_display.length"
-                  @current-change="handleCurrentChange_patient" />
+                               :page-size="pageSize_patient" layout="prev, pager, next, jumper" :total="Patient_display.length"
+                               @current-change="handleCurrentChange_patient" />
               </div>
             </div>
           </div>
@@ -127,6 +127,8 @@ export default defineComponent({
       doctorInfo: {},
       currentDate: new Date(),
       formattedDate: '',
+
+      patient_name: [],
     };
   },
   mounted() {
@@ -150,7 +152,7 @@ export default defineComponent({
   methods: {
     formatDate() {
       const year = this.currentDate.getFullYear();
-      const month = this.currentDate.getMonth() + 1; // Months are zero-based
+      const month = (this.currentDate.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
       this.formattedDate = `${year}-${month}`;
       console.log(this.formattedDate);
     },
@@ -180,24 +182,63 @@ export default defineComponent({
         console.error('Error fetching new API data:', error);
       }
     },
+    async getpatientname_tosend(ID) {
+      return new Promise((resolve, reject) => {
+        axios.get('http://121.43.108.102:8201/api/appointment/get/' + ID)
+            .then((response) => {
+              this.patient_name = response.data.data;
+              console.log(this.patient_name);
+              resolve();
+            })
+            .catch((error) => {
+              console.error('Error fetching patient data:', error);
+              reject(error);
+            });
+      });
+    },
+    async send_patient() {
+      try {
+        const requestBody = {
+          username: this.patient_name.patientId,
+          adminUsername: store.state.username,
+          auditStatus: '你的预约请求被取消',
+          kind: '患者'
+        };
+        const result=JSON.stringify(requestBody);
+        const response = await axios.post('http://47.117.145.92:8302/api/message/send', result, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log('Response:', response.data);
+      } catch (error) {
+        console.error('Error sending data:', error);
+      }
+    },
+    send(ID) {
+      this.getpatientname_tosend(ID).then(() => {
+        this.send_patient();
+      })
+    },
     async getallinfo(doctorUsername) {
       return new Promise((resolve, reject) => {
         axios.get('http://121.43.108.102:8101/api/doctor/' + doctorUsername)
-          .then((response) => {
-            this.doctorInfo = response.data.data;
-            console.log(this.doctorInfo);
-            resolve();
-          })
-          .catch((error) => {
-            console.error('Error fetching patient data:', error);
-            reject(error);
-          });
+            .then((response) => {
+              this.doctorInfo = response.data.data;
+              console.log(this.doctorInfo);
+              resolve();
+            })
+            .catch((error) => {
+              console.error('Error fetching patient data:', error);
+              reject(error);
+            });
       });
     },
     async getKpi() {
       //todo:日期格式化
       try {
-        const response = await axios.get('http://118.195.236.254:8401/api/hospital/' + parseInt(this.doctorInfo.hospitalId) + '/kpi/doctor/' + this.doctorInfo.jobNumber + '/month/'+this.formattedDate);
+        console.log('http://118.195.236.254:8401/api/hospital/' + parseInt(this.doctorInfo.hospitalId) + '/kpi/doctor/' + this.doctorInfo.jobNumber + '/month/' + this.formattedDate)
+        const response = await axios.get('http://118.195.236.254:8401/api/hospital/' + parseInt(this.doctorInfo.hospitalId) + '/kpi/doctor/' + this.doctorInfo.jobNumber + '/month/' + this.formattedDate);
         this.kpiInfos = response.data.data;
         console.log(this.kpiInfos);
       } catch (error) {
@@ -221,6 +262,9 @@ export default defineComponent({
       const idValue = row.id;
       const kindValue = listName;
       const judgeValue = 1;
+      if (kindValue == "医生") {
+        this.send(row.orderId);
+      }
       this.check_sendData(idValue, kindValue, judgeValue);
       window.alert('审核通过');
     },

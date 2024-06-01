@@ -39,7 +39,7 @@ export default defineComponent({
         try {
           // 获取医生信息
           const response = await axios.get(
-            "http://121.43.108.102:8101/api/doctor/id/" + appointment.doctorId
+            "http://121.43.108.102:8101/api/doctor/" + appointment.doctorId
           );
 
           // 更新预约信息中的医生名称
@@ -54,20 +54,19 @@ export default defineComponent({
       console.log("Edit row:", row.id, "Operation:", "cancel");
 
       // 打开对话框前先清空输入框
-      this.cancelReason = "";
       this.orderId = row.id;
       this.cancelDialogVisible = true;
     },
     async confirmCancel() {
       console.log(this.orderId);
-      console.log(this.cancelReason);
+      console.log(this.selectedReason);
       try {
         const response = await axios({
           method: "put",
           url: "http://121.43.108.102:8201/api/appointment/cancel/patient/",
           data: {
             orderId: this.orderId,
-            cancelReason: this.cancelReason,
+            cancelReason: this.selectedReason,
           },
           headers: {
             "Content-Type": "application/json",
@@ -122,6 +121,15 @@ export default defineComponent({
         },
       ],
       appointments_display: [],
+      selectedReason: '', // 存储选中的取消原因
+      cancelReasons: [
+        { value: '预约信息有误'},
+        { value: '时间冲突'},
+        { value: '更换医院'},
+        { value: '病情自愈'},
+        { value: '其它原因'},
+        // 可以添加更多的取消原因
+      ],
     };
   },
 });
@@ -177,19 +185,35 @@ export default defineComponent({
     @current-change="handlePageChange"
   />
 
-  <el-dialog v-model="cancelDialogVisible" title="取消原因">
-    <el-input
-      v-model="cancelReason"
-      placeholder="请输入取消原因"
-      :rows="5"
-      type="textarea"
-      style="margin-bottom: 20px"
-    />
-    <span class="dialog-footer">
-      <el-button type="primary" @click="confirmCancel">确认</el-button>
-      <el-button @click="cancelDialogVisible = false">取消</el-button>
-    </span>
-  </el-dialog>
+<!--  <el-dialog v-model="cancelDialogVisible" title="取消原因">-->
+<!--    <el-input-->
+<!--      v-model="cancelReason"-->
+<!--      placeholder="请输入取消原因"-->
+<!--      :rows="5"-->
+<!--      type="textarea"-->
+<!--      style="margin-bottom: 20px"-->
+<!--    />-->
+<!--    <span class="dialog-footer">-->
+<!--      <el-button type="primary" @click="confirmCancel">确认</el-button>-->
+<!--      <el-button @click="cancelDialogVisible = false">取消</el-button>-->
+<!--    </span>-->
+<!--  </el-dialog>-->
+
+    <!-- 申请取消 -->
+    <el-dialog v-model="cancelDialogVisible" width="50%" title="申请取消" align-center>
+      <el-radio-group v-model="selectedReason">
+        <el-radio :label="reason.value" :key="reason" v-for="reason in cancelReasons">
+          {{ reason.value }}
+        </el-radio>
+      </el-radio-group>
+      <div style="display: flex; justify-content: flex-end; margin-top: 40px;margin-right: 40px;">
+        <el-button plain type="danger" size="mini" @click="confirmCancel">
+          申请取消
+        </el-button>
+      </div>
+    </el-dialog>
+    <!-- 取消成功提示 -->
+
 </template>
 
 <style scoped>

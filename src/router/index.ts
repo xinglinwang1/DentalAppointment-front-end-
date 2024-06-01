@@ -56,25 +56,25 @@ const router = createRouter({
       path: '/user',
       name: 'UserHomeView',
       component: UserHomeView,
-      meta: { requiresAuth: false, requiredRoles: ['patient'] }
+      meta: { requiresAuth: true, requiredRoles: ['patient'] }
     },
     {
       path: '/doctorHome',
       name: 'DoctorHomeView',
       component: DoctorHomeView,
-      meta: { requiresAuth: false, requiredRoles: ['doctor'] }
+      meta: { requiresAuth: true, requiredRoles: ['doctor'] }
     },
     {
       path: '/scheduling/:doctorname',
       name: 'SchedulingView',
       component: SchedulingView,
-      meta: { requiresAuth: false, requiredRoles: ['doctor'] }
+      meta: { requiresAuth: true, requiredRoles: ['doctor'] }
     },
     {
       path: '/admin',
       name: 'Admin',
       component: AdminHomeView,
-      meta: { requiresAuth: false, requiredRoles: ['admin'] }
+      meta: { requiresAuth: true, requiredRoles: ['admin'] }
     }
   ]
 })
