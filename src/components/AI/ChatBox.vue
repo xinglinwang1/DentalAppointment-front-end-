@@ -58,7 +58,7 @@ export default {
 
         // 获取accessToken
         async fetchAccessToken() {
-          const apiUrl = '/baiduApi/oauth/2.0/token';
+          const apiUrl = '/116.30.22.114/oauth/2.0/token';
           const params = {
             grant_type: 'client_credentials',
             client_id: 'MmQNSFwQC3wcYie9TecDFckD',
@@ -82,7 +82,7 @@ export default {
 
         // 获取回答
         async sendChatRequest() {
-            const apiUrl = '/baiduApi/rpc/2.0/unit/service/chat';
+            const apiUrl = '/116.30.22.114/rpc/2.0/unit/service/chat';
       
             const requestBody = {
                 log_id: "1234567890",

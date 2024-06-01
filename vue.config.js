@@ -1,11 +1,11 @@
 module.exports = {
   devServer: {
     proxy: {
-      '/baiduApi': {
+      '/116.30.22.114': {
         target: 'https://aip.baidubce.com',
         changeOrigin: true,
         pathRewrite: {
-          '^/baiduApi': '' // 将 '/baiduApi' 前缀去掉
+          '^/116.30.22.114': '' // 将 '/baiduApi' 前缀去掉
         }
       }
     }
