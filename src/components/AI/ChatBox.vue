@@ -5,8 +5,8 @@
             <div class="chat-messages" ref="chatMessages">
                 <div v-for="(message, index) in messages" :key="index" class="chat-message">
                     <div class="message"
-                        :class="{ 'user-message': message.sender === 'user', 'bot-message': message.sender === 'bot' }">
-                        {{ message.text }}
+                        :class="{ 'user-message': message.role === 'user', 'bot-message': message.role === 'system' }">
+                        {{ message.content }}
                     </div>
                 </div>
             </div>
@@ -22,6 +22,7 @@
 
 <script>
 import axios from 'axios';
+import OpenAI from 'openai';
 
 export default {
     name: "ChatMechine",
@@ -34,20 +35,26 @@ export default {
     data() {
         return {
             messages: [
-                { sender: 'bot', text: '你好！我是AI小济，有什么能帮上你的？' }
+                { role: 'system', content: '你好！我是AI小济，有什么能帮上你的？' }
             ],
             index: 1,
             newMessage: '',
             chatObjectName: '',
-            sessionId: '',
-            accessToken: '',
+            // sessionId: '',
+            // accessToken: '',
+            client: new OpenAI({
+              apiKey: 'sk-RpoWv4O9F9d9Kutc5Oarp7PP47PUjetPrVMiTQXIBilZWaWv', // 确保在.env文件中设置了这个环境变量
+              baseURL: 'https://api.moonshot.cn/v1',
+              dangerouslyAllowBrowser: true
+            })
         };
     },
     methods: {
-        sendMessage() {
+        
+        async sendMessage() {
             if (this.newMessage.trim() !== '') {
-                this.messages.push({ sender: 'user', text: this.newMessage });
-                this.sendChatRequest();
+                this.messages.push({ role: 'user', content: this.newMessage });
+                await this.chat();
                 this.newMessage = '';
                 this.scrollToBottom();
             }
@@ -56,85 +63,99 @@ export default {
             this.$refs.chatMessages.scrollTop = this.$refs.chatMessages.scrollHeight;
         },
 
-        // 获取accessToken
-        async fetchAccessToken() {
-          const apiUrl = '/116.30.22.114/oauth/2.0/token';
-          const params = {
-            grant_type: 'client_credentials',
-            client_id: 'MmQNSFwQC3wcYie9TecDFckD',
-            client_secret: '1YJDlAvsduEeICSjg410ti98Ga5zkF7I'
-          };
-    
-          try {
-            const response = await axios.post(apiUrl, null, { params });
-            const data = response.data;
-    
-            if (data.access_token) {
-              this.accessToken = data.access_token;
-              console.log('Access Token:', this.accessToken);
-            } else {
-              console.error('Error: Access token not found in the response.');
-            }
-          } catch (error) {
-            console.error('Request Error:', error);
-          }
+
+        async chat() {
+        //   this.messages.push({
+        //     role: 'user',
+        //     content: this.newMessage
+        //   });
+          const completion = await this.client.chat.completions.create({
+            model: 'moonshot-v1-8k',
+            messages: this.messages
+          });
+          this.messages.push(completion.choices[0].message);
+          return completion.choices[0].message.content;
         },
 
-        // 获取回答
-        async sendChatRequest() {
-            const apiUrl = '/116.30.22.114/rpc/2.0/unit/service/chat';
+        // // 获取accessToken
+        // async fetchAccessToken() {
+        //   const apiUrl = '/116.30.22.114/oauth/2.0/token';
+        //   const params = {
+        //     grant_type: 'client_credentials',
+        //     client_id: 'MmQNSFwQC3wcYie9TecDFckD',
+        //     client_secret: '1YJDlAvsduEeICSjg410ti98Ga5zkF7I'
+        //   };
+    
+        //   try {
+        //     const response = await axios.post(apiUrl, null, { params });
+        //     const data = response.data;
+    
+        //     if (data.access_token) {
+        //       this.accessToken = data.access_token;
+        //       console.log('Access Token:', this.accessToken);
+        //     } else {
+        //       console.error('Error: Access token not found in the response.');
+        //     }
+        //   } catch (error) {
+        //     console.error('Request Error:', error);
+        //   }
+        // },
+
+        // // 获取回答
+        // async sendChatRequest() {
+        //     const apiUrl = '/116.30.22.114/rpc/2.0/unit/service/chat';
       
-            const requestBody = {
-                log_id: "1234567890",
-                version: '2.0',
-                service_id: 'S107999',
-                session_id: this.sessionId,
-                request: {
-                  query: this.newMessage,
-                  user_id: '1234567890'
-                },
-                dialog_state: {
-                  contexts: {
-                    SYS_REMEMBERED_SKILLS: [
-                      '1510572'
-                    ]
-                  }
-                }
-            };
+        //     const requestBody = {
+        //         log_id: "1234567890",
+        //         version: '2.0',
+        //         service_id: 'S107999',
+        //         session_id: this.sessionId,
+        //         request: {
+        //           query: this.newMessage,
+        //           user_id: '1234567890'
+        //         },
+        //         dialog_state: {
+        //           contexts: {
+        //             SYS_REMEMBERED_SKILLS: [
+        //               '1510572'
+        //             ]
+        //           }
+        //         }
+        //     };
       
-            try {
-                const response = await axios.post(`${apiUrl}?access_token=${this.accessToken}`, requestBody);
-                const responseData = response.data;
+        //     try {
+        //         const response = await axios.post(`${apiUrl}?access_token=${this.accessToken}`, requestBody);
+        //         const responseData = response.data;
         
-                // 检查响应是否成功
-                if (responseData.error_code === 0) {
-                    // 存储 session_id
-                    this.sessionId = responseData.result.session_id;
+        //         // 检查响应是否成功
+        //         if (responseData.error_code === 0) {
+        //             // 存储 session_id
+        //             this.sessionId = responseData.result.session_id;
           
-                    // 提取字段 say
-                    const sayText = responseData.result.response_list[0].action_list[0].say;
+        //             // 提取字段 say
+        //             const sayText = responseData.result.response_list[0].action_list[0].say;
           
-                    // 创建返回的消息对象
-                    this.messages.push({
-                      sender: 'bot',
-                      text: sayText,
-                    });
-                    this.scrollToBottom();
+        //             // 创建返回的消息对象
+        //             this.messages.push({
+        //               sender: 'bot',
+        //               text: sayText,
+        //             });
+        //             this.scrollToBottom();
       
           
-                    console.log('Session ID:', this.sessionId);
-                    console.log('Message:', this.message);
-                } else {
-                    console.error('API Error:', responseData.error_msg);
-                }
-            } catch (error) {
-                console.error('Request Error:', error);
-            }
-        }  
+        //             console.log('Session ID:', this.sessionId);
+        //             console.log('Message:', this.message);
+        //         } else {
+        //             console.error('API Error:', responseData.error_msg);
+        //         }
+        //     } catch (error) {
+        //         console.error('Request Error:', error);
+        //     }
+        // }  
     },
     mounted() {
         this.scrollToBottom();
-        this.fetchAccessToken();
+        //this.fetchAccessToken();
     }
 };
 </script>
