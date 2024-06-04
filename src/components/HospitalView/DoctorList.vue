@@ -122,7 +122,7 @@ export default defineComponent({
     getDoctorAllList(hospitalId){
       return new Promise((resolve, reject) => {
         //TODO:1为hospitalId,后期再修改
-        axios.get(`http://121.43.108.102:8101/api/doctor/getByHospital/${hospitalId}`)
+        axios.get(`http://47.116.162.133:8101/api/doctor/getByHospital/${hospitalId}`)
           .then(response => {
             this.doctorAllList = response.data.data;
             console.log(this.doctorAllList);

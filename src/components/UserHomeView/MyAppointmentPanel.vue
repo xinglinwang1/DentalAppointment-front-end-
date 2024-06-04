@@ -23,7 +23,7 @@ export default defineComponent({
     async getAppointments() {
       try {
         const response = await axios.get(
-          "http://121.43.108.102:8201/api/appointment/get/patient/" +
+          "http://118.178.253.118:8201/api/appointment/get/patient/" +
             store.state.username
         );
         this.appointments = response.data.data;
@@ -39,7 +39,7 @@ export default defineComponent({
         try {
           // 获取医生信息
           const response = await axios.get(
-            "http://121.43.108.102:8101/api/doctor/" + appointment.doctorId
+            "http://47.116.162.133:8101/api/doctor/" + appointment.doctorId
           );
 
           // 更新预约信息中的医生名称
@@ -63,7 +63,7 @@ export default defineComponent({
       try {
         const response = await axios({
           method: "put",
-          url: "http://121.43.108.102:8201/api/appointment/cancel/patient/",
+          url: "http://118.178.253.118:8201/api/appointment/cancel/patient/",
           data: {
             orderId: this.orderId,
             cancelReason: this.selectedReason,

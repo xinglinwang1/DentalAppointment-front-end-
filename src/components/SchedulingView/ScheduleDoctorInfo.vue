@@ -22,7 +22,7 @@ export default defineComponent({
       return new Promise((resolve, reject) => {
         console.log(doctorname);
         //TODO
-        axios.get(`http://121.43.108.102:8101/api/doctor/${doctorname}`)
+        axios.get(`http://47.116.162.133:8101/api/doctor/${doctorname}`)
           .then(response => {
             this.doctorInfo = response.data.data;
             console.log(this.doctorInfo);

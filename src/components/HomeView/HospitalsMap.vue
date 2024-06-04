@@ -202,7 +202,7 @@ export default {
     async loadHospitalInfo() {
       // 使用 this.$http 进行网络请求
       try {
-        const response = await axios.get('http://118.195.236.254:8401/api/hospital/');
+        const response = await axios.get('http://118.31.222.253:8401/api/hospital/');
         console.log(response.data.code)
         if (response.data.code) {
           this.hospitalInfoList = response.data.data;

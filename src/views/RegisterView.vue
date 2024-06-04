@@ -67,7 +67,7 @@ export default defineComponent({
         try {
           const response = await axios({
             method: 'post',
-            url: 'http://121.43.108.102:8101/api/patient/register',
+            url: 'http://47.116.162.133:8101/api/patient/register',
             data: {
               username: this.formData.patientInfo.username,
               password: this.formData.patientInfo.password,
@@ -92,7 +92,7 @@ export default defineComponent({
         try {
           const response = await axios({
             method: 'post',
-            url: 'http://121.43.108.102:8101/api/' + this.role + '/login',
+            url: 'http://47.116.162.133:8101/api/' + this.role + '/login',
             data: {
               username: this.formData.patientInfo.username,
               password: this.formData.patientInfo.password,
@@ -119,7 +119,7 @@ export default defineComponent({
         try {
           const response = await axios({
             method: 'post',
-            url: 'http://121.43.108.102:8101/api/doctor/register',
+            url: 'http://47.116.162.133:8101/api/doctor/register',
             data: {
               username: this.formData.doctorInfo.username,
               password: this.formData.doctorInfo.password,
@@ -141,7 +141,7 @@ export default defineComponent({
             try {
               const response = await axios({
                 method: 'post',
-                url: 'http://121.43.108.102:8101/api/' + this.role + '/login',
+                url: 'http://47.116.162.133:8101/api/' + this.role + '/login',
                 data: {
                   username: this.formData.doctorInfo.username,
                   password: this.formData.doctorInfo.password,
@@ -162,6 +162,12 @@ export default defineComponent({
             } catch (error) {
               console.error("Error login", error);
             }
+          }
+          if(response.data.code === 500) {
+            this.$message({
+              message: "注册信息与医院信息不匹配！",
+              type: "error",
+            });
           }
 
         } catch (error) {

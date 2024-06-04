@@ -15,7 +15,7 @@ export default defineComponent({
   methods: {
     async getHospitalInfo() {
       try {
-        const response = await axios.get('http://118.195.236.254:8401/api/hospital/' + this.hospitalId);
+        const response = await axios.get('http://118.31.222.253:8401/api/hospital/' + this.hospitalId);
         this.hospitalInfo = response.data.data;
       } catch (error) {
         console.error('Error fetching hospital data:', error);

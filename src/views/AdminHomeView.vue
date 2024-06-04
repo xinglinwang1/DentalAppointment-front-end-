@@ -158,7 +158,7 @@ export default defineComponent({
     },
     async getDoctorData() {
       try {
-        const response = await axios.get('http://118.195.236.254:8301/api/approval/doctor', {
+        const response = await axios.get('http://47.116.162.133:8301/api/approval/doctor', {
           params: {
             adminUsername: store.state.username,
           },
@@ -171,7 +171,7 @@ export default defineComponent({
     },
     async getPatientData() {
       try {
-        const response = await axios.get('http://118.195.236.254:8301/api/approval/patient', {
+        const response = await axios.get('http://47.116.162.133:8301/api/approval/patient', {
           params: {
             adminUsername: store.state.username,
           },
@@ -184,7 +184,7 @@ export default defineComponent({
     },
     async getpatientname_tosend(ID) {
       return new Promise((resolve, reject) => {
-        axios.get('http://121.43.108.102:8201/api/appointment/get/' + ID)
+        axios.get('http://118.178.253.118:8201/api/appointment/get/' + ID)
             .then((response) => {
               this.patient_name = response.data.data;
               console.log(this.patient_name);
@@ -205,7 +205,7 @@ export default defineComponent({
           kind: '患者'
         };
         const result=JSON.stringify(requestBody);
-        const response = await axios.post('http://47.117.145.92:8302/api/message/send', result, {
+        const response = await axios.post('http://118.178.253.118:8302/api/message/send', result, {
           headers: {
             'Content-Type': 'application/json'
           }
@@ -222,7 +222,7 @@ export default defineComponent({
     },
     async getallinfo(doctorUsername) {
       return new Promise((resolve, reject) => {
-        axios.get('http://121.43.108.102:8101/api/doctor/' + doctorUsername)
+        axios.get('http://47.116.162.133:8101/api/doctor/' + doctorUsername)
             .then((response) => {
               this.doctorInfo = response.data.data;
               console.log(this.doctorInfo);
@@ -237,8 +237,8 @@ export default defineComponent({
     async getKpi() {
       //todo:日期格式化
       try {
-        console.log('http://118.195.236.254:8401/api/hospital/' + parseInt(this.doctorInfo.hospitalId) + '/kpi/doctor/' + this.doctorInfo.jobNumber + '/month/' + this.formattedDate)
-        const response = await axios.get('http://118.195.236.254:8401/api/hospital/' + parseInt(this.doctorInfo.hospitalId) + '/kpi/doctor/' + this.doctorInfo.jobNumber + '/month/' + this.formattedDate);
+        console.log('http://118.31.222.253:8401/api/hospital/' + parseInt(this.doctorInfo.hospitalId) + '/kpi/doctor/' + this.doctorInfo.jobNumber + '/month/' + this.formattedDate)
+        const response = await axios.get('http://118.31.222.253:8401/api/hospital/' + parseInt(this.doctorInfo.hospitalId) + '/kpi/doctor/' + this.doctorInfo.jobNumber + '/month/' + this.formattedDate);
         this.kpiInfos = response.data.data;
         console.log(this.kpiInfos);
       } catch (error) {
@@ -280,7 +280,7 @@ export default defineComponent({
       try {
         const response = await axios({
           method: 'put',
-          url: 'http://118.195.236.254:8301/api/approval/checkresult',
+          url: 'http://47.116.162.133:8301/api/approval/checkresult',
           data: {
             approvalId: approvalId,
             kind: kind,

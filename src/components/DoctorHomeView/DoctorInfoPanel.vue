@@ -28,7 +28,7 @@ export default defineComponent({
   methods: {
     async getDoctorData() {
       try {
-        const response = await axios.get('http://121.43.108.102:8101/api/doctor/' + this.doctor_username);
+        const response = await axios.get('http://47.116.162.133:8101/api/doctor/' + this.doctor_username);
         this.doctor_info = response.data.data;
       } catch (error) {
         console.error('Error fetching doctor data:', error);
@@ -45,7 +45,7 @@ export default defineComponent({
       try {
         const response = await axios({
           method: 'put',
-          url: 'http://121.43.108.102:8101/api/doctor',
+          url: 'http://47.116.162.133:8101/api/doctor',
           data: {
             username: this.doctor_info.username,
             phone: this.doctor_info.phone,

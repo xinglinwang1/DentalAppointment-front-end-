@@ -84,7 +84,7 @@ export default defineComponent({
       console.log(this.formattedChosenDate);
       axios
           .get(
-              `http://118.195.236.254:8401/api/hospital/3/appointment/doctor/150201/day/${this.formattedChosenDate}`
+              `http://118.31.222.253:8401/api/hospital/3/appointment/doctor/150201/day/${this.formattedChosenDate}`
           )
           .then((response) => {
             this.allInfo = response.data.data;
@@ -118,7 +118,7 @@ export default defineComponent({
     async getDoctorInfo(doctorname) {
       //TODO
       try {
-        const response = await axios.get(`http://121.43.108.102:8101/api/doctor/id/${doctorname}`);
+        const response = await axios.get(`http://47.116.162.133:8101/api/doctor/id/${doctorname}`);
         this.doctorInfo = response.data.data;
       } catch (error) {
         console.error('Error fetching doctor data:', error);
@@ -133,7 +133,7 @@ export default defineComponent({
       try {
         const response = await axios({
           method: 'post',
-          url: 'http://121.43.108.102:8201/api/appointment/book',
+          url: 'http://118.178.253.118:8201/api/appointment/book',
           data: {
             patientId:  store.state.username,
             doctorId: this.doctorInfo.username,

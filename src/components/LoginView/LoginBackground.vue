@@ -86,7 +86,7 @@ export default defineComponent({
       try {
         const response = await axios({
           method: 'post',
-          url: 'http://121.43.108.102:8101/api/' + this.role + '/login',
+          url: 'http://47.116.162.133:8101/api/' + this.role + '/login',
           data: {
             username: this.ruleForm.username,
             password: this.ruleForm.password

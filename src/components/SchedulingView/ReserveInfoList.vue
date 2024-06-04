@@ -285,7 +285,7 @@ export default defineComponent({
     getDoctorInfo(doctorId) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`http://121.43.108.102:8101/api/doctor/${doctorId}`)
+          .get(`http://47.116.162.133:8101/api/doctor/${doctorId}`)
 
           .then((response) => {
             this.doctorUsername = response.data.data.username;
@@ -308,7 +308,7 @@ export default defineComponent({
       return new Promise((resolve, reject) => {
         axios
           .get(
-            `http://121.43.108.102:8201/api/appointment/get/doctor/${this.doctorname}`
+            `http://118.178.253.118:8201/api/appointment/get/doctor/${this.doctorname}`
           )
           .then((response) => {
             this.reserveInfoListAll = response.data.data;
@@ -360,7 +360,7 @@ export default defineComponent({
       try {
         const response = await axios({
           method: "put",
-          url: "http://121.43.108.102:8201/api/appointment/cancel/doctor",
+          url: "http://118.178.253.118:8201/api/appointment/cancel/doctor",
           data: {
             orderId: cancelRequest.orderId,
             cancelReason: cancelRequest.cancelReason,
@@ -405,7 +405,7 @@ export default defineComponent({
     getPatientInfo(patientId) {
       return new Promise((resolve, reject) => {
         axios
-          .get(`http://121.43.108.102:8101/api/patient/${patientId}`)
+          .get(`http://47.116.162.133:8101/api/patient/${patientId}`)
           .then((response) => {
             this.patientInfo = response.data.data;
             console.log(this.patientInfo);
@@ -444,7 +444,7 @@ export default defineComponent({
     getPatientCase(patientIdNum) {
       axios
         .get(
-          `http://118.195.236.254:8401/api/hospital/${this.hospitalId}/medical-record/${patientIdNum}`
+          `http://118.31.222.253:8401/api/hospital/${this.hospitalId}/medical-record/${patientIdNum}`
         )
         .then((response) => {
           this.patientCase = response.data.data;

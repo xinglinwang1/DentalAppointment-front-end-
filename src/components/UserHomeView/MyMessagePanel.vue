@@ -19,7 +19,7 @@ export default defineComponent({
       try {
         const response = await axios({
           method: 'post',
-          url: 'http://47.117.145.92:8302/api/message/get_usermessage',
+          url: 'http://118.178.253.118:8302/api/message/get_usermessage',
           data: {
             username: store.state.username,
           },
