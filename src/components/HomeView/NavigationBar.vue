@@ -164,6 +164,7 @@ export default defineComponent({
   position: fixed;
   display: flex;
   align-items: center;
+  z-index: 9999
 }
 
 .logo {
