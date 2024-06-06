@@ -3,7 +3,7 @@
     <img class="doctor-image" src="../../assets/images/doctor.png" alt="no image">
     <span class="doctor-entrance-font">医生入口</span>
   </router-link> -->
-  <div class="doctor-entrance-container" @click="jumpToView()">
+  <div class="doctor-entrance-container" @click="jumpToView()" style="cursor: pointer">
     <img class="doctor-image" src="../../assets/images/doctor.png" alt="no image">
     <span class="doctor-entrance-font">医生入口</span>
   </div>

@@ -3,7 +3,7 @@
     <img id="reservation-image" src="../../assets/images/reservation.png" alt="no image">
     <span id="title">患者入口</span>
   </router-link> -->
-  <div class="reservation-container" @click="jumpToView()">
+  <div class="reservation-container" @click="jumpToView()" style="cursor: pointer">
     <img id="reservation-image" src="../../assets/images/reservation.png" alt="no image">
     <span id="title">患者入口</span>
   </div>

@@ -170,6 +170,7 @@ export default defineComponent({
 .logo {
   margin-left: 10%;
   float: left;
+  cursor: pointer
 }
 .navigate-menu {
   width: 27%;
@@ -201,6 +202,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   float: left;
+  cursor: pointer
 }
 .search-button:hover {
   background-color: rgb(105, 138, 216); /* 鼠标悬停时改变背景色为蓝色 */
@@ -217,6 +219,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   float: left;
+  cursor: pointer
 }
 .login-button:hover {
   background-color: rgb(105, 138, 216); /* 鼠标悬停时改变背景色为蓝色 */
@@ -229,6 +232,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   float: left;
+  cursor: pointer
 }
 .clearfix {
   height: 32px;

@@ -13,13 +13,13 @@
     <div class="hospital-container">
       <div v-for="hospitalInfo in hospitalInfoList" :key="hospitalInfo.id" class="hospital-info-card">
         <!-- <router-link :to="{name: 'HospitalView', params: { id: hospitalInfo.id }}"> -->
-        <div @click="toHospitalView(hospitalInfo.id)">
+        <div @click="toHospitalView(hospitalInfo.id)" style="cursor: pointer">
           <div style="width:60%; float:left; margin-left:2%">
             <div class="hospital-name">{{ hospitalInfo.hospitalName }}</div>
             <div class="hospital-desc">{{ hospitalInfo.introduction }}</div>
           </div>
           <div style="width:35%; float:left; margin-left:3%">
-            <img :src="hospitalInfo.photo" alt="no image" style="width:99%; height:99%">
+            <img :src="hospitalInfo.photo" alt="no image" style="width:99%; height:160px">
           </div>
           <div class="clearfix"> </div>
         </div>

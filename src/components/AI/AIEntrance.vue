@@ -45,7 +45,8 @@ export default {
 }
 
 .img-container{
-width: 60px;
+  width: 60px;
   height: 60px;
+  cursor: pointer
 }
 </style>
