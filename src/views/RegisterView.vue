@@ -129,7 +129,7 @@ export default defineComponent({
               name: this.formData.doctorInfo.name,
               jobNumber: parseInt(this.formData.doctorInfo.jobNumber),
               department: this.formData.doctorInfo.department,
-              photoUrl: 'https://n1.hdfimg.com/g8/M06/61/B0/t4YBAGA3rhKATuABAATKzxQOiEA569_200_200_1.png?cfa2'
+              photoUrl: 'https://tse4-mm.cn.bing.net/th/id/OIP-C.gmYViJkJWbRynlcNSfQOugHaHa?w=209&h=210&c=7&r=0&o=5&dpr=1.3&pid=1.7'
             },
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'

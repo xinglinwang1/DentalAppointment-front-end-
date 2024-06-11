@@ -44,13 +44,13 @@ const router = createRouter({
       path: '/hospital/:id',
       name: 'HospitalView',
       component: HospitalView,
-      meta: { requiresAuth: false, requiredRoles: ['patient', 'doctor', 'admin'] }
+      meta: { requiresAuth: true, requiredRoles: ['patient', 'doctor', 'admin'] }
     },
     {
       path: '/doctor/:doctorname',
       name: 'DoctorView',
       component: DoctorView,
-      meta: { requiresAuth: false, requiredRoles: ['patient', 'doctor', 'admin'] }
+      meta: { requiresAuth: true, requiredRoles: ['patient', 'doctor', 'admin'] }
     },
     {
       path: '/user',
